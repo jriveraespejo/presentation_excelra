@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: docs
+    
+execute:
+  freeze: auto
+  cache: true
+  # eval: true
+  echo: false
+  # output: true
+  # include: true
+  warning: false
+  error: false
+  message: false
+
+format:
+  revealjs: 
+    theme: simple
+    transition: none
+    slide-number: true
+    #number-sections: true
+    #number-depth: 2
+    chalkboard: true
+    preview-links: auto
+    csl: diabetologia.csl
+    css: styles.css
+    logo: figures/Excelra-Logo.png
+    footer: 'Optimizing Protein Yield: RSM vs. BO | Jose Manuel Rivera Espejo | [Github Repository](https://github.com/jriveraespejo/presentation_excelra.git)'
+    #embed-resources: true

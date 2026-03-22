@@ -1,0 +1,606 @@
+---
+title: "Optimizing Protein Yield"
+subtitle: "A comparative approach: RSM vs. BO"
+author: "Jose Manuel Rivera Espejo"
+date: last-modified
+date-format: "DD MMMM YYYY"
+bibliography: references.bib
+title-slide-attributes: 
+  data-notes: |
+    Thank you for having me, Lynn and Francisco
+include-in-header:
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.5em;
+      }
+      </style>
+---
+
+## The contents {style="font-size:60%;"}
+
+1. Motivating example
+2. 
+3. 
+4. 
+5.  
+6. 
+7. 
+8. 
+
+```{r}
+#| echo: false
+#| output: false
+#| code-fold: true
+#| code-summary: "code"
+
+# working environment ####
+
+# cleaning R start
+rm(list=ls()); gc()
+
+# loading libraries
+libraries = c( 
+  # general purpose
+  'here',
+  # experimental design
+  'FrF2','daewr','rsm'
+) 
+# sapply(libraries, install.packages, character.only=T)
+sapply(libraries, require, character.only=T)
+
+# sourcing used defined functions (udf)
+source( file.path(here(), 'code', 'udf.R') )
+
+seed = 12345
+
+```
+
+
+---
+
+## Motivating example {style="font-size:60%;"}
+
+::: {.fragment}
+**The context:**
+
+::: incremental
+- We have a high-value protein production process,
+- We known that seven ($7$) factors may potentially affect the process yield ($Y$),
+- We are uncertain if our current operating conditions are "sub-optimal"
+:::
+:::
+
+::: {.fragment}
+**The conflict:** laboratory experiments are
+
+::: incremental
+- Expensive
+- Time-consuming
+- Resource-constrained
+:::
+:::
+
+::: {.fragment}
+**The goal:** 
+
+::: incremental
+- Identify relevant factors that affect the process (*screen*)
+- Find the "peak yield" (*optimize*)
+- **Restriction:** use as few runs as possible
+:::
+:::
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+Our current operating conditions are in a small space, but there is so much **parameter space** to explore!
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+## Current operation conditions ####
+k = 7 # number of factors
+d0 = data.frame( matrix( c(2, 10, 5, 100, 10, 20, 20), nrow=1, ncol=7) )
+names(d0) = LETTERS[1:k]
+
+set.seed( seed )
+d0$Y = true_protein_yield( X=as.matrix(d0) )
+
+```
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2), c(3,2),
+            c(1,3), c(3,4) )
+mr = c(14, 100, 24*4, 1000, 30, 100, 100)
+
+par( mfrow=c(2,2) )
+for( j in 1:length(twi) ){
+  idx = !names(d0) %in% c( names(d0)[ twi[[j]] ], 'Y' )
+  nam = paste( 
+    names(d0)[ twi[[j]][1] ],'\n',
+    paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+  
+  plot( d0[,twi[[j]]], 
+        pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 0, mr[ twi[[j]][2] ] ),
+        xlim=c( 0, mr[ twi[[j]][1] ] ), 
+        ylab=names(d0)[ twi[[j]][2] ],
+        xlab=nam )
+  text( d0[,twi[[j]]] + 1, labels =round(d0$Y,1) )
+}
+par( mfrow=c(1,1) )
+
+```
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+Our current operating conditions are in a small space, but there is so much **parameter space** to explore!
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+plot( d0[,twi[[1]]], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 0, mr[ twi[[1]][2] ] ),
+      xlim=c( 0, mr[ twi[[1]][1] ] ), 
+      ylab=names(d0)[ twi[[1]][2] ],
+      xlab=nam )
+text( d0[,twi[[1]]] + 0.5, labels =round(d0$Y,1) )
+
+```
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+Our current operating conditions are in a small space, but there is so much **parameter space** to explore!
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+plot( d0[,twi[[1]]], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 0, mr[ twi[[1]][2] ] ),
+      xlim=c( 0, mr[ twi[[1]][1] ] ), 
+      ylab=names(d0)[ twi[[1]][2] ],
+      xlab=nam )
+rect( 0, 0, 4, 20)
+text( d0[,twi[[1]]] + 0.5, labels =round(d0$Y,1) )
+
+```
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+Our current operating conditions are in a small space, but there is so much **parameter space** to explore!
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+plot( d0[,twi[[1]]], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 0, 20 ),
+      xlim=c( 0, 4 ), 
+      ylab=names(d0)[ twi[[1]][2] ],
+      xlab=nam )
+text( d0[,twi[[1]]] + 0.15, labels =round(d0$Y,1) )
+
+```
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+Which of our $7$ factors affect the process yield?
+
+| Variable | Factor           | Range       | Units | Role         |
+| :---     | :---             | :---        | :---  | :---         |
+| $A$      | pH               | $0.0-14.0$  |       | Relevant     |
+| $B$      | Temp             | $0.0-100.0$ | C     | Relevant     |
+| $C$      | Incubation time  | $0-96$      | h     | Non-relevant |
+| $D$      | Agitation speed  | $0-1000$    | RPM   | Non-relevant |
+| $E$      | Initial glucose  | $0-30$      | g/l   | Non-relevant |
+| $F$      | Dissolved oxygen | $0-100$     | %     | Non-relevant |
+| $G$      | Inoculum volume  | $0-100$     | %     | Non-relevant |
+
+::: {.fragment}
+Two options: 
+
+::: incremental
+- A **full factorial (CRFD)** design with $k=7$ factors would take $2^{k}=2^{7}=128$ experimental runs.
+
+- A **resolution III fractional factorial (CRFF)** design with $k=7$ factors would take $2^{k-p} = 2^{7-4} = 8$ experimental runs.
+:::
+:::
+
+:::{.notes}
+- you have at least $7$ main effects and $8$ runs (only $1$ df)
+- resolution III CRFF: $p=4$ main effects are aliased with 2fi
+:::
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+A **resolution III fractional factorial (CRFF)** design with $k=7$ factors, have the following characteristics:
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# design CRFF
+set.seed( seed )
+dsg = FrF2( nfactors=k, resolution=3 )
+
+# checking design
+colormap(dsg, mod=2)
+
+```
+
+:::{.notes}
+- resolution III CRFF: $p=4$ main effects are aliased with 2fi
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# checking design
+print('Aliases')
+y = runif( nrow(dsg), 0, 1)
+aliases( lm( y~(.)^2, data=dsg) )
+
+```
+:::
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+How a **resolution III CRFF** looks like?
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# convert to data.frame
+d = data.frame( as.matrix(dsg[,1:k]) ) # design
+d = sapply(d, as.integer)
+d = data.frame(d)
+
+# create natural variables
+nv = rbind( 
+  d0[,-ncol(d0)], # central points
+  c(3-1, 15-5, 6-4, 150-50, 15-5, 30-10, 30-10) # ranges to test
+)
+for( j in 1:k ){
+  d[,j] = d[,j]*nv[2,j]/2 + nv[1,j] 
+}
+
+```
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+plot( d0[,twi[[1]]], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 0, 20 ),
+      xlim=c( 0, 4 ), 
+      ylab=names(d0)[ twi[[1]][2] ],
+      xlab=nam )
+points( d[,1:2], pch=19, col=rgb(0,0,1,0.5) )
+
+```
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+After conducting the experiments, we test which factors are relevant:
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# measure
+set.seed( seed )
+d$Y = true_protein_yield( X = as.matrix( d[,1:k] ) )
+
+# model for all First Order (FO) effects
+model1 = lm( Y ~ A + B + C + D + E + F + G, data=d)
+summary(model1)
+
+```
+
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+After conducting the experiments, we test which factors are relevant:
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# model for all First Order (FO) effects
+halfnorm( coef(model1) )
+
+```
+
+---
+
+## Step 1: Identify relevant factors {style="font-size:60%;"}
+
+After conducting the experiments, we test which factors are relevant:
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# reduced model for First Order (FO) effects
+model2 = lm( Y ~ A + B, data=d)
+summary(model2)
+
+```
+
+
+---
+
+## Step 2: Steepest ascend {style="font-size:60%;"}
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# experiment block
+d$block = 'screen'
+
+# add some center points
+for( i in 1:4 ){
+  d = rbind( d, data.frame( d0[,-ncol(d0)], Y=NA, block='center') )
+}
+
+set.seed( seed )
+d$Y[is.na(d$Y)] = true_protein_yield( X = as.matrix( d[is.na(d$Y),1:k] ) )
+
+# model
+model_rsm = rsm( Y ~ FO(A,B), data=d )
+summary(model_rsm)
+
+# direction
+sa = steepest(model_rsm, dist=1, descent=F)
+
+# new point
+new = d0
+check = T
+set.seed( seed )
+while( check ){
+  new$A = new$A + 1
+  new$B = new$B + with(sa, A/B)*(new$A-2)
+  new$Y = true_protein_yield( X = as.matrix( new[,-ncol(new)] ) )
+  d = rbind( d, data.frame(new, block='ascend') )
+  check = with(d, Y[nrow(d)] - Y[nrow(d)-1] > 0 )
+}
+
+```
+
+
+---
+
+## Step 2: Steepest ascend {style="font-size:60%;"}
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+contour( model_rsm, ~ A+B, image=T,
+         ylim=c( 0, 20 ),
+         xlim=c( 0, 4 ) )
+points( d[ d$block!='ascend', twi[[1]] ], 
+        pch=19, col=rgb(0,0,0,0.5) )
+
+# equation of a line
+point1 = d[which( d$block=='center')[1], twi[[1]] ] 
+point2 = d[which( d$block=='ascend')[1], twi[[1]] ] 
+b = ( point2[,2] - point1[,2] ) / ( point2[,1] - point1[,1] )
+a = point1[,2] - b*point1[,1]
+abline( a=a, b=b, lty=2 )
+
+```
+
+---
+
+## Step 2: Steepest ascend {style="font-size:60%;"}
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# plot
+twi = list( c(1,2) )
+
+par( mfrow=c(1,1) )
+idx = !names(d0) %in% c( names(d0)[ twi[[1]] ], 'Y' )
+nam = paste( 
+  names(d0)[ twi[[1]][1] ],'\n',
+  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
+
+contour( model_rsm, ~ A+B, image=T,
+         ylim=c( 0, 100 ),
+         xlim=c( 0, 14 ) )
+points( d[, twi[[1]] ], 
+        pch=19, col=rgb(0,0,0,0.5) )
+text( d[ d$block=='ascend', twi[[1]] ] - 0.5, 
+      labels = round( d$Y[ d$block=='ascend'],1) )
+
+# equation of a line
+abline( a=a, b=b, lty=2 )
+
+```
+
+---
+
+## Motivating example {style="font-size:60%;"}
+
+We have an "unknown" **true model** that relates seven ($7$) variables to the yield of a protein ($Y$):
+
+$$
+Y = \text{inv_logit} \left[ \gamma_{0} - \gamma_{1}(pH - c_{1})^2 - \gamma_{2}(T - c_{2})^2 + \sum_{j=3}^{7} \gamma_{j} \cdot X_{j} + \gamma_{8}(pH - c_{1})(T - c_{2}) + e \right]
+$$
+
+with error $e \sim N(0,\sigma_{e})$ and,
+
+
+
+::: {.notes}
+- In reality the **true model** is not available to us.
+- However, simulation is useful to showcase the potential of the experimental strategies.
+:::
+
+## Motivating example {style="font-size:60%;"}
+
+But, how does this look like?
+
+- The peak yield ($100\%$) is at $pH=10$ and $T=60$ 
+
+
+
+---
+
+## Additional Considerations: Variability {style="font-size:60%;"}
+
+In a real-world setting at Excelra, we must acknowledge that not all noise is equal.
+
+* **Sources of Variability:**
+    * **RSE (Random Statistical Error):** Natural fluctuations in biological systems.
+    * **NSE (Non-Systematic Error):** Potential issues with equipment or batch effects.
+* **Design Intent:** While our current project focuses on optimization, we keep these sources in mind to ensure the process remains **robust**, not just high-yielding.
+
+---
+
+## Additional Considerations: Complexity {style="font-size:60%;"}
+
+What happens when the problem grows?
+
+* **Multiple Objectives:** If we need high **Yield** but low **Waste**, we employ **Desirability Functions** to find the "Sweet Spot" that balances both.
+* **Extrapolation:**
+    * Empirical models (RSM/BO) are dangerous outside their tested range.
+    * If we must predict outside our data, we shift toward **Theoretical/Mechanistic Models** based on biological first principles.
+
+---
+
+## Thank you {.center-xy}
+
+::: {.notes}
+To conclude I can say that, 
+
+1. I can bring my PhD-level expertise to the Leuven office.
+3. I am ready to operationalize these workflows starting from the **20 of April**.
+:::
+
+
+---
+
+## Questions? {.center-xy}
+
+---
+
+## References {style="font-size:60%;"}
+
+:::{#refs style="font-size:80%;"}
+
+:::
