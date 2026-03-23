@@ -25,5 +25,5 @@ format:
     csl: diabetologia.csl
     css: styles.css
     logo: figures/Excelra-Logo.png
-    footer: 'Optimizing Protein Yield: RSM vs. BO | Jose Manuel Rivera Espejo | [Github Repository](https://github.com/jriveraespejo/presentation_excelra.git)'
+    footer: 'Optimizing Protein Yield: RSM with BO | Jose Manuel Rivera Espejo | [Github Repository](https://github.com/jriveraespejo/presentation_excelra.git)'
     #embed-resources: true

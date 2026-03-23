@@ -4,140 +4,182 @@
     "href": "RSM_and_BO.html#the-contents",
     "title": "Optimizing Protein Yield",
     "section": "The contents",
-    "text": "The contents\n\nMotivating example"
+    "text": "The contents\n\nMotivating example\nStep 1: Identify relevant factors\nStep 2: Steepest ascend\nStep 3: Bayesian Optimization\nThe reality\nFAIR principles in practice"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example",
     "href": "RSM_and_BO.html#motivating-example",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\n\nThe context:\n\n\nWe have a high-value protein production process,\nWe known that seven (\\(7\\)) factors may potentially affect the process yield (\\(Y\\)),\nWe are uncertain if our current operating conditions are “sub-optimal”\n\n\n\n\nThe conflict: laboratory experiments are\n\n\nExpensive\nTime-consuming\nResource-constrained\n\n\n\n\nThe goal:\n\n\nIdentify relevant factors that affect the process (screen)\nFind the “peak yield” (optimize)\nRestriction: use as few runs as possible"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nOur current operating conditions are in a small space, but there is so much parameter space to explore!"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nOur current operating conditions are in a small space, but there is so much parameter space to explore!"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nOur current operating conditions are in a small space, but there is so much parameter space to explore!"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nOur current operating conditions are in a small space, but there is so much parameter space to explore!"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nWhich of our \\(7\\) factors affect the process yield?\n\n\n\nVariable\nFactor\nRange\nUnits\nRole\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\nRelevant\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\nRelevant\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\nNon-relevant\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\nNon-relevant\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\nNon-relevant\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\nNon-relevant\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%\nNon-relevant\n\n\n\n\nTwo options:\n\n\nA full factorial (CRFD) design with \\(k=7\\) factors would take \\(2^{k}=2^{7}=128\\) experimental runs.\nA resolution III fractional factorial (CRFF) design with \\(k=7\\) factors would take \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs.\n\n\n\n\n\nyou have at least \\(7\\) main effects and \\(8\\) runs (only \\(1\\) df)\nresolution III CRFF: \\(p=4\\) main effects are aliased with 2fi"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nA resolution III fractional factorial (CRFF) design with \\(k=7\\) factors, have the following characteristics:\n\n\n\nresolution III CRFF: \\(p=4\\) main effects are aliased with 2fi\n\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nHow a resolution III CRFF looks like?"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-7",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-7",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C + D + E + F + G, data = d)\n\nResiduals:\nALL 8 residuals are 0: no residual degrees of freedom!\n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)\n(Intercept) 26.53697        NaN     NaN      NaN\nA            1.13388        NaN     NaN      NaN\nB            1.22248        NaN     NaN      NaN\nC           -0.40987        NaN     NaN      NaN\nD            0.01028        NaN     NaN      NaN\nE            0.02701        NaN     NaN      NaN\nF           -0.06552        NaN     NaN      NaN\nG           -0.01745        NaN     NaN      NaN\n\nResidual standard error: NaN on 0 degrees of freedom\nMultiple R-squared:      1, Adjusted R-squared:    NaN \nF-statistic:   NaN on 7 and 0 DF,  p-value: NA"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-8",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-8",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nzscore= 0.07841241 0.2372021 0.4022501 0.5791322 0.7764218 1.00999 1.318011 1.862732effp= 0.01027513 0.0174463 0.02701173 0.06551825 0.409872 1.133876 1.222481 26.53697"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-9",
-    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-9",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nCall:\nlm.default(formula = Y ~ A + B, data = d)\n\nResiduals:\n       1        2        3        4        5        6        7        8 \n 0.04108  0.51189 -1.06859  1.61822  0.44955 -0.59070  0.57797 -1.53941 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 24.12595    1.27976  18.852 7.74e-06 ***\nA            1.13388    0.42659   2.658    0.045 *  \nB            1.22248    0.08532  14.329 2.98e-05 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.207 on 5 degrees of freedom\nMultiple R-squared:  0.977, Adjusted R-squared:  0.9678 \nF-statistic: 106.2 on 2 and 5 DF,  p-value: 8.024e-05"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-2-steepest-ascend",
-    "href": "RSM_and_BO.html#step-2-steepest-ascend",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 2: Steepest ascend",
-    "text": "Step 2: Steepest ascend\n\n\n\nCall:\nrsm(formula = Y ~ FO(A, B), data = d)\n\n            Estimate Std. Error t value  Pr(&gt;|t|)    \n(Intercept) 24.55848    1.36540 17.9863 2.310e-08 ***\nA            1.13388    0.46380  2.4447   0.03708 *  \nB            1.22248    0.09276 13.1789 3.453e-07 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nMultiple R-squared:  0.9523,    Adjusted R-squared:  0.9417 \nF-statistic: 89.83 on 2 and 9 DF,  p-value: 1.131e-06\n\nAnalysis of Variance Table\n\nResponse: Y\n            Df  Sum Sq Mean Sq F value    Pr(&gt;F)\nFO(A, B)     2 309.177 154.589   89.83 1.131e-06\nResiduals    9  15.488   1.721                  \nLack of fit  2   6.602   3.301    2.60    0.1431\nPure error   7   8.887   1.270                  \n\nDirection of steepest ascent (at radius 1):\n        A         B \n0.6800372 0.7331776 \n\nCorresponding increment in original units:\n        A         B \n0.6800372 0.7331776 \n\n\nPath of steepest ascent from ridge analysis:"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-1",
-    "href": "RSM_and_BO.html#step-2-steepest-ascend-1",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 2: Steepest ascend",
-    "text": "Step 2: Steepest ascend"
-  },
-  {
-    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-2",
-    "href": "RSM_and_BO.html#step-2-steepest-ascend-2",
-    "title": "Optimizing Protein Yield",
-    "section": "Step 2: Steepest ascend",
-    "text": "Step 2: Steepest ascend"
+    "text": "Motivating example\nThe context:\n\nWe have a high-value protein production process,\nWe known that seven (\\(7\\)) factors may potentially affect the process yield (\\(Y\\)),\nWe certain that our current operating conditions are “sub-optimal”\n\n\n\n\nVariable\nFactor\nRange\nUnits\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example-1",
     "href": "RSM_and_BO.html#motivating-example-1",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\nWe have an “unknown” true model that relates seven (\\(7\\)) variables to the yield of a protein (\\(Y\\)):\n\\[\nY = \\text{inv_logit} \\left[ \\gamma_{0} - \\gamma_{1}(pH - c_{1})^2 - \\gamma_{2}(T - c_{2})^2 + \\sum_{j=3}^{7} \\gamma_{j} \\cdot X_{j} + \\gamma_{8}(pH - c_{1})(T - c_{2}) + e \\right]\n\\]\nwith error \\(e \\sim N(0,\\sigma_{e})\\) and,\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
+    "text": "Motivating example\nThe conflict: laboratory experiments are\n\nExpensive\nTime-consuming\nResource-constrained\n\n\nThe goal:\n\nIdentify relevant factors that affect the process (screen)\nFind the “peak yield” (optimize)\nRestriction: use as few runs as possible"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example-2",
     "href": "RSM_and_BO.html#motivating-example-2",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\nBut, how does this look like?\n\nThe peak yield (\\(100\\%\\)) is at \\(pH=10\\) and \\(T=60\\)"
+    "text": "Motivating example\nOur current operating conditions are in a small parameter space, but there is so much parameter space to explore!"
   },
   {
-    "objectID": "RSM_and_BO.html#additional-considerations-variability",
-    "href": "RSM_and_BO.html#additional-considerations-variability",
+    "objectID": "RSM_and_BO.html#motivating-example-3",
+    "href": "RSM_and_BO.html#motivating-example-3",
     "title": "Optimizing Protein Yield",
-    "section": "Additional Considerations: Variability",
-    "text": "Additional Considerations: Variability\nIn a real-world setting at Excelra, we must acknowledge that not all noise is equal.\n\nSources of Variability:\n\nRSE (Random Statistical Error): Natural fluctuations in biological systems.\nNSE (Non-Systematic Error): Potential issues with equipment or batch effects.\n\nDesign Intent: While our current project focuses on optimization, we keep these sources in mind to ensure the process remains robust, not just high-yielding."
+    "section": "Motivating example",
+    "text": "Motivating example\nTo facilitate the explanation, we focus on factors A and B; however, the ideas presented here apply equally to the remaining factors."
   },
   {
-    "objectID": "RSM_and_BO.html#additional-considerations-complexity",
-    "href": "RSM_and_BO.html#additional-considerations-complexity",
+    "objectID": "RSM_and_BO.html#motivating-example-4",
+    "href": "RSM_and_BO.html#motivating-example-4",
     "title": "Optimizing Protein Yield",
-    "section": "Additional Considerations: Complexity",
-    "text": "Additional Considerations: Complexity\nWhat happens when the problem grows?\n\nMultiple Objectives: If we need high Yield but low Waste, we employ Desirability Functions to find the “Sweet Spot” that balances both.\nExtrapolation:\n\nEmpirical models (RSM/BO) are dangerous outside their tested range.\nIf we must predict outside our data, we shift toward Theoretical/Mechanistic Models based on biological first principles."
+    "section": "Motivating example",
+    "text": "Motivating example\nMoreover, we focus on a restricted region within the seven (\\(7\\)) factor space, illustrated here using factors A and B."
+  },
+  {
+    "objectID": "RSM_and_BO.html#motivating-example-5",
+    "href": "RSM_and_BO.html#motivating-example-5",
+    "title": "Optimizing Protein Yield",
+    "section": "Motivating example",
+    "text": "Motivating example\nMoreover, we focus on a restricted region within the seven (\\(7\\)) factor space, illustrated here using factors A and B."
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nTwo options:\n\nA \\(2^{k}\\) full factorial (CRFD) design [1] with \\(k=7\\) factors would take \\(2^{k}=2^{7}=128\\) experimental runs.\nA resolution III fractional factorial (CRFF) design [1] with \\(k=7\\) factors and \\(p=4\\) generators would take \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs.\n\nBenefits:\n\nA \\(2^{k}\\) CRFD design allows you to estimate an intercept, all \\(7\\) main effects, all \\(21\\) two-way interactions, all \\(7\\) pure quadratic terms, and more.\nA resolution III CRFF design only allows you estimate an intercept, and all \\(7\\) main effects\n\n\n\nCAREFUL resolution III CRFF has main effects aliased with some 2fi"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nA resolution III CRFF design [1] with \\(k=7\\) factors and \\(p=4\\) generators, have the following characteristics:\n\n\n\nresolution III CRFF: main effects are aliased with 2fi\n\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nHow a resolution III CRFF looks like?\n\n\nThis design happen at every combination of the \\(7\\) factors"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C + D + E + F + G, data = d)\n\nResiduals:\nALL 8 residuals are 0: no residual degrees of freedom!\n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)\n(Intercept) 21.53697        NaN     NaN      NaN\nA            1.13388        NaN     NaN      NaN\nB            1.22248        NaN     NaN      NaN\nC           -0.40987        NaN     NaN      NaN\nD            0.01028        NaN     NaN      NaN\nE            0.02701        NaN     NaN      NaN\nF           -0.06552        NaN     NaN      NaN\nG           -0.01745        NaN     NaN      NaN\n\nResidual standard error: NaN on 0 degrees of freedom\nMultiple R-squared:      1, Adjusted R-squared:    NaN \nF-statistic:   NaN on 7 and 0 DF,  p-value: NA"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nThanks to the Central Limit Theorem (CLT), we can still identify significant effects.\n\n\nWe can use this plot thanks to CLT\nNO relevance of \\(D\\), which could indicate the presence of 2fi between \\(A\\) and \\(B\\)\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C, data = d)\n\nResiduals:\n      1       2       3       4       5       6       7       8 \n 0.4509  0.1020 -1.4785  1.2083  0.8594 -0.1808  0.1681 -1.1295 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 21.17531    2.51118   8.432 0.001083 ** \nA            1.13388    0.43066   2.633 0.058013 .  \nB            1.22248    0.08613  14.193 0.000143 ***\nC           -0.40987    0.43066  -0.952 0.395132    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.218 on 4 degrees of freedom\nMultiple R-squared:  0.9812,    Adjusted R-squared:  0.9672 \nF-statistic: 69.76 on 3 and 4 DF,  p-value: 0.0006554"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, we test which factors are relevant:\n\n\n\nCall:\nlm.default(formula = Y ~ A + B, data = d)\n\nResiduals:\n       1        2        3        4        5        6        7        8 \n 0.04108  0.51189 -1.06859  1.61822  0.44955 -0.59070  0.57797 -1.53941 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 19.12595    1.27976  14.945 2.43e-05 ***\nA            1.13388    0.42659   2.658    0.045 *  \nB            1.22248    0.08532  14.329 2.98e-05 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.207 on 5 degrees of freedom\nMultiple R-squared:  0.977, Adjusted R-squared:  0.9678 \nF-statistic: 106.2 on 2 and 5 DF,  p-value: 8.024e-05"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nIn order to use methods from Response Surface Methodology (RMS) [1] we need to add some center points and build a model that describes the yield space:"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-1",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend-1",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nAfter collecting the outcome resulting from the experimental design we see:\n\n\n\nCall:\nrsm(formula = Y ~ FO(A, B), data = d)\n\n            Estimate Std. Error t value  Pr(&gt;|t|)    \n(Intercept) 19.55848    1.36540 14.3244 1.682e-07 ***\nA            1.13388    0.46380  2.4447   0.03708 *  \nB            1.22248    0.09276 13.1789 3.453e-07 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nMultiple R-squared:  0.9523,    Adjusted R-squared:  0.9417 \nF-statistic: 89.83 on 2 and 9 DF,  p-value: 1.131e-06\n\nAnalysis of Variance Table\n\nResponse: Y\n            Df  Sum Sq Mean Sq F value    Pr(&gt;F)\nFO(A, B)     2 309.177 154.589   89.83 1.131e-06\nResiduals    9  15.488   1.721                  \nLack of fit  2   6.602   3.301    2.60    0.1431\nPure error   7   8.887   1.270                  \n\nDirection of steepest ascent (at radius 1):\n        A         B \n0.6800372 0.7331776 \n\nCorresponding increment in original units:\n        A         B \n0.6800372 0.7331776 \n\n\n\n\nPath of steepest ascent from ridge analysis:"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-2",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend-2",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nHow does the space look like?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-3",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend-3",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nNow we proceed to ascend towards a maximum."
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-4",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend-4",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nAnd we focus our attention on the highest yield area:"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-2-steepest-ascend-5",
+    "href": "RSM_and_BO.html#step-2-steepest-ascend-5",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 2: Steepest ascend",
+    "text": "Step 2: Steepest ascend\nAnd we focus our attention on the highest yield area:"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nWithin this high-yield region, we implement Bayesian Optimization (BO) [2].\nSpecifically:\n\nWe use relevant initial training data from the steepest ascent procedure\nIn this case, the three design points located within the high-yield region.\nWe use a surrogate model to approximate the yield surface for a set of candidate data points\nHere, a Gaussian Process with Radial Basis Function (RBF) kernel [3, 4] is employed .\nWe use an acquisition function to determine the next point to evaluate in the search space\nIn this case, we use the Expected Improvement function (see illustration).\nWe define a stopping criterion to determine when to terminate the search\nBecause a central composite design would require \\(2^2 = 4\\) factorial points, \\(2^2 = 4\\) axial (face) points, and \\(4\\) center points, for a total of \\(12\\) experimental runs [1], the optimization procedure will use \\(8\\) runs."
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-1",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-1",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the training and candidate data look like?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#the-reality",
+    "href": "RSM_and_BO.html#the-reality",
+    "title": "Optimizing Protein Yield",
+    "section": "The reality",
+    "text": "The reality\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\n“unknown” true protein yield surface:\n\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
+  },
+  {
+    "objectID": "RSM_and_BO.html#the-reality-1",
+    "href": "RSM_and_BO.html#the-reality-1",
+    "title": "Optimizing Protein Yield",
+    "section": "The reality",
+    "text": "The reality\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\n“unknown” true protein yield surface with screen, ascend, and optimization points:"
+  },
+  {
+    "objectID": "RSM_and_BO.html#fair-principles-in-practice",
+    "href": "RSM_and_BO.html#fair-principles-in-practice",
+    "title": "Optimizing Protein Yield",
+    "section": "FAIR principles in practice",
+    "text": "FAIR principles in practice\nThis presentation is built to be a research object, not just a slide deck.\n\nFindable (F): Searchable text and structured metadata ensure the content is discoverable.\nNext step: Provision of a DOI via Zenodo or OSF.\nAccesible (A): Publicly hosted on GitHub.\nAnyone with an internet connection can retrieve the slides and underlying data.\nInteroperable (I): Built using Open Source (Quarto/R).\nSeamlessly integrates into any analysis workflow and automated pipelines.\nReusable (R): CC-BY 4.0 Licensed.\nIncludes all R dependencies and source code to fully replicate every simulation and analysis."
   },
   {
     "objectID": "RSM_and_BO.html#thank-you",
     "href": "RSM_and_BO.html#thank-you",
     "title": "Optimizing Protein Yield",
     "section": "Thank you",
-    "text": "Thank you\n\nTo conclude I can say that,\n\nI can bring my PhD-level expertise to the Leuven office.\nI am ready to operationalize these workflows starting from the 20 of April."
+    "text": "Thank you\n\nTo conclude I can say that,"
   },
   {
     "objectID": "RSM_and_BO.html#questions",
@@ -147,10 +189,24 @@
     "text": "Questions?"
   },
   {
+    "objectID": "RSM_and_BO.html#annex-additional-considerations",
+    "href": "RSM_and_BO.html#annex-additional-considerations",
+    "title": "Optimizing Protein Yield",
+    "section": "Annex: additional considerations",
+    "text": "Annex: additional considerations\nIn a real-world setting. the identification of those \\(7\\) factors probably comes from experiments that seek to determine Sources of Variability. e.g.,\n\nRSE (Random Statistical Error): Natural fluctuations in biological systems.\nNSE (Non-Systematic Error): Potential issues with equipment or batch effects."
+  },
+  {
+    "objectID": "RSM_and_BO.html#annex-additional-considerations-1",
+    "href": "RSM_and_BO.html#annex-additional-considerations-1",
+    "title": "Optimizing Protein Yield",
+    "section": "Annex: additional considerations",
+    "text": "Annex: additional considerations\nWhat happens when the problem grows?\n\nMultiple Objectives: If we need high Yield but low Waste, we employ Desirability Functions to find the “Sweet Spot” that balances both.\nExtrapolation:\n\nEmpirical models (RSM/BO) are dangerous outside their tested range.\nIf we must predict outside our data, we shift toward Theoretical/Mechanistic Models based on biological first principles."
+  },
+  {
     "objectID": "RSM_and_BO.html#references",
     "href": "RSM_and_BO.html#references",
     "title": "Optimizing Protein Yield",
     "section": "References",
-    "text": "References\n\n\n\n\n\n\n\nOptimizing Protein Yield: RSM vs. BO | Jose Manuel Rivera Espejo | Github Repository"
+    "text": "References\n\n\n1. Lawson J (2015) Design and analysis of experiments with r. Chapman; Hall/CRC\n\n\n2. Sweet D (2023) Experimentation for engineers. Manning Publications Co.\n\n\n3. Rasmussen CE, Williams CKI (2005) Gaussian processes for machine learning. The MIT Press\n\n\n4. Nielsen A (2023) Bayesian optimisation from scratch in r\n\n\n\n\n\n\nOptimizing Protein Yield: RSM with BO | Jose Manuel Rivera Espejo | Github Repository"
   }
 ]

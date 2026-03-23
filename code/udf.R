@@ -60,7 +60,7 @@ true_protein_yield = function(
     cp = c(12, 70, rep(0, 5) ),
     twi = list( c(1,2) ),
     pq = 1:2,
-    betas = c(90, -0.4, -0.02, rep(0.01, 5), 0.1),
+    betas = c(85, -0.4, -0.02, rep(0.01, 5), 0.1),
     sigma_e = 2 ){
   
   # # test
@@ -70,7 +70,8 @@ true_protein_yield = function(
   # cp = c(7.2, 37, rep(0, 5) )
   # twi = list( c(1,2) )
   # pq = 1:2
-  # betas = c(95, -0.6428, -0.0214, rep(0.01, 5), 0.0857),
+  # betas = c(4.4, -0.4, -0.005, rep(0.001, 5), 0.1)
+  # betas = c(85, -0.4, -0.02, rep(0.01, 5), 0.1)
   # sigma_e = 1
 
   # true covariates
@@ -102,3 +103,139 @@ true_protein_yield = function(
   return( Y )
 }
 
+
+#' RBF Kernel function
+#'
+#' @param X1 matrix of dimensions (n, d)
+#' @param X2 matrix of dimensions (m, d)
+#' @param l length scale
+#' @param sigma_f scale parameter 
+#'
+#' @return matrix of dimensions (n, m)
+rbf_kernel = function(X1, X2, l=1, sigma_f=1 ){
+  
+  # # test
+  # X1=x_train[,-ncol(x_train)]
+  # X2=x_train[,-ncol(x_train)]
+  # l=1.0
+  # sigma_f=1.0
+  
+  # calculating distances
+  dist_sq = matrix( NA, nrow=nrow(X1), ncol=nrow(X2) )
+  for( i in 1:nrow(X1) ){
+    dist_sq[i,] = sapply( 
+      1:nrow(X2), 
+      function(j){ sum( (X1[i,] - X2[j,] )^2 ) } )
+  }
+  
+  # return object
+  return( sigma_f^2 * exp( -dist_sq /(2 * l^2) ) )
+  
+}
+
+
+#' Posterior Gaussian Process
+#'
+#' @param X_predict matrix (m, d) of prediction points
+#' @param X_train matrix (n, d) of training points
+#' @param Y_train column vector (n, d) of training observations
+#' @param l length scale
+#' @param sigma_f scale parameter 
+#' @param noise scalar of observation noise
+#'
+#' @return list of mean (mu) and covariance (sigma) for the Gaussian
+posterior = function(X_train, X_predict, Y_train, l=1, sigma_f=1, noise=1e-8 ) {
+  
+  # # test
+  # X_train = x_train
+  # X_predict = x_predict
+  # Y_train = y_train
+  # l=1
+  # sigma_f=1
+  # noise=1e-8
+  
+  # covariance calculations
+  Stt = rbf_kernel( X_train, X_train, l=l, sigma_f=sigma_f  ) # consider noise: + noise**2 * diag(dim(X_train)[[1]])
+  Stp = rbf_kernel( X_train, X_predict, l=l, sigma_f=sigma_f )
+  Spp = rbf_kernel( X_predict, X_predict, l=l, sigma_f=sigma_f ) # consider noise: + noise**2 * diag(dim(X_predict)[[1]])
+  Stt_inv = solve(Stt)
+  
+  # mu and sigma
+  w = t(Stp) %*% Stt_inv
+  res = matrix( (Y_train-mean(Y_train)), 
+                nrow=length(Y_train), ncol=1, byrow=T)
+  mu = w %*% res
+  sigma = Spp - ( t(Stp) %*% Stt_inv) %*% Stp
+  
+  # return object
+  return( list( mu=mu, sigma=sigma ) )
+  
+}
+
+#' Negative log-Likelihood of a Kernel
+#'
+#' @param X_train matrix (n, d) of training points
+#' @param Y_train column vector (n, d) of training observations
+#' @param noise scalar of observation noise
+#'
+#' @return function with kernel parameters as input and negative log likelihood
+#' as output
+negative_loglik = function( X_train, Y_train, noise=1e-8, ... ) {
+  
+  function(params) {
+    n = dim(X_train)[[1]]
+    K = rlang::exec( rbf_kernel, X1=X_train, X2=X_train, !!!params )
+    L = chol( K ) # cholesky decomposition, consider noise: + noise**2 * diag(n)
+    a = backsolve( r=L, x=forwardsolve( l=t(L), x=Y_train) )
+    
+    # return object
+    return( 0.5*t(Y_train)%*%a + sum(log(diag(L))) + 0.5*n*log(2*pi) )
+  }
+}
+
+
+#' Gaussian Process Regression
+#'
+#' @param kernel kernel function
+#' @param X_train matrix (n, d) of training points
+#' @param y_train column vector (n, d) of training observations
+#' @param noise scalar of observation noise
+#' @param ... parameters of the kernel function with initial guesses. Due to the
+#' optimizer used, all parameters must be given and the order unfortunately
+#' matters
+#'
+#' @return function that takes a matrix of prediction points as input and
+#' returns the posterior predictive distribution for the output
+gaussian_process_regression = function( 
+    X_train, X_predict, Y_train, l=1, sigma_f=1, noise=1e-8 ) {
+  
+  # # test
+  # X_train = x_train[,-ncol(x_train)]
+  # X_predict = x_predict
+  # Y_train = x_train[,ncol(x_train)]
+  # l=1.5
+  # sigma_f=1
+  # noise=1e-8
+  
+  # parameter optimization
+  kernel_nll = negative_loglik( X_train, Y_train, l=l, sigma_f=sigma_f, noise=noise )
+  param = c( l, sigma_f )
+  opt = optim( par=rep(1, length(param)), fn=kernel_nll )
+  opt_param = opt$par
+  
+  # posterior
+  post = posterior(
+    X_train = X_train,
+    X_predict = X_predict,
+    Y_train = Y_train,
+    l=opt_param[1], 
+    sigma_f=opt_param[2], 
+    noise=noise)
+  
+  # return object
+  return( 
+    list( mu = post$mu, sigma = diag(post$sigma),
+          parameters = c(l=opt_param[1], sigma_f=opt_param[2] ) )
+  )
+  
+}
