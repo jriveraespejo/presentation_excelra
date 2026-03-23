@@ -162,9 +162,7 @@ posterior = function(X_train, X_predict, Y_train, l=1, sigma_f=1, noise=1e-8 ) {
   
   # mu and sigma
   w = t(Stp) %*% Stt_inv
-  res = matrix( (Y_train-mean(Y_train)), 
-                nrow=length(Y_train), ncol=1, byrow=T)
-  mu = w %*% res
+  mu = as.vector( w %*% Y_train )
   sigma = Spp - ( t(Stp) %*% Stt_inv) %*% Stp
   
   # return object
@@ -210,9 +208,9 @@ gaussian_process_regression = function(
     X_train, X_predict, Y_train, l=1, sigma_f=1, noise=1e-8 ) {
   
   # # test
-  # X_train = x_train[,-ncol(x_train)]
+  # X_train = x_train
   # X_predict = x_predict
-  # Y_train = x_train[,ncol(x_train)]
+  # Y_train = y_train
   # l=1.5
   # sigma_f=1
   # noise=1e-8
@@ -233,9 +231,71 @@ gaussian_process_regression = function(
     noise=noise)
   
   # return object
-  return( 
-    list( mu = post$mu, sigma = diag(post$sigma),
-          parameters = c(l=opt_param[1], sigma_f=opt_param[2] ) )
-  )
+  return( list(
+    mu=post$mu, sigma=diag(post$sigma),
+    parameters = c(l=opt_param[1], sigma_f=opt_param[2] ) 
+  ) )
+  
+}
+
+
+
+#' Lower Confidence Bound (LCB)
+#'
+#' @param post posterior from a Gaussian process
+#' @param lambda scalar, exploration/exploitation trade off
+#'
+#' @return EI, vector of length m
+lower_confidence_bound = function( post, lambda=1 ) {
+  
+  # # test
+  # post
+
+  # return object
+  return( post$mu  + lambda * post$sigma )
+  
+}
+
+
+
+#' Expected Improvement (EI)
+#'
+#' @param post posterior from a Gaussian process
+#' @param lambda scalar, exploration/exploitation trade off
+#'
+#' @return EI, vector of length m
+expected_improvement = function( 
+    X_train, X_predict, Y_train, l=1, sigma_f=1, noise=1e-8 ) {
+  
+  # # test
+  # X_train = x_train
+  # X_predict = x_predict
+  # Y_train = y_train
+  # l=1.5
+  # sigma_f=1
+  # noise=1e-8
+  
+  # calculating posteriors
+  post_train = gaussian_process_regression( 
+    X_train = X_train, 
+    X_predict = X_train, 
+    Y_train = Y_train, 
+    l=l, sigma_f=l, noise=noise )
+  
+  post_predict = gaussian_process_regression( 
+    X_train = X_train, 
+    X_predict = X_predict, 
+    Y_train = Y_train, 
+    l=l, sigma_f=l, noise=noise )
+  
+  # expected improvement
+  sigma = post_predict$sigma
+  improvement = min(post_train$mu) - post_predict$mu
+  Z = improvement / sigma
+  ei = improvement * pnorm(Z) + sigma * dnorm(Z)
+  ei[ sigma == 0.0 ] = 0.0
+  
+  # return object
+  return( ei )
   
 }

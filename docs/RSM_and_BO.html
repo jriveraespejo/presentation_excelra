@@ -380,11 +380,11 @@ Jose Manuel Rivera Espejo
 </section>
 <section id="motivating-example" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
-<p><strong>The context:</strong></p>
+<p><strong>Context:</strong></p>
 <ul>
-<li>We have a high-value protein production process,</li>
-<li>We known that seven (<span class="math inline">\(7\)</span>) factors may potentially affect the process yield (<span class="math inline">\(Y\)</span>),</li>
-<li>We certain that our current operating conditions are “sub-optimal”</li>
+<li>We study a high-value protein production process</li>
+<li>Current operating conditions may be sub-optimal</li>
+<li>Seven factors may affect the process yield (<span class="math inline">\(Y\)</span>),</li>
 </ul>
 <table>
 <thead>
@@ -443,57 +443,24 @@ Jose Manuel Rivera Espejo
 </section>
 <section id="motivating-example-1" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
-<p><strong>The conflict:</strong> laboratory experiments are</p>
+<p><strong>Goal:</strong></p>
+<ul>
+<li><em>Screen</em> relevant factors that affect the process</li>
+<li>Find the <em>optimal</em> yield</li>
+</ul>
+<p><strong>Constraint:</strong> Minimize experimental runs, because laboratory experiments are:</p>
 <ul>
 <li>Expensive</li>
 <li>Time-consuming</li>
 <li>Resource-constrained</li>
 </ul>
-<div class="fragment">
-<p><strong>The goal:</strong></p>
-<ul>
-<li>Identify relevant factors that affect the process (<em>screen</em>)</li>
-<li>Find the “peak yield” (<em>optimize</em>)</li>
-<li><strong>Restriction:</strong> use as few runs as possible</li>
-</ul>
-</div>
 </section>
 <section id="motivating-example-2" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
-<p>Our current operating conditions are in a small parameter space, but there is so much <strong>parameter space</strong> to explore!</p>
+<p>What are our current operating conditions?</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
-<section id="motivating-example-3" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>To facilitate the explanation, we focus on factors A and B; however, the ideas presented here apply equally to the remaining factors.</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
-<section id="motivating-example-4" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>Moreover, we focus on a restricted region within the seven (<span class="math inline">\(7\)</span>) factor space, illustrated here using factors A and B.</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
-<section id="motivating-example-5" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>Moreover, we focus on a restricted region within the seven (<span class="math inline">\(7\)</span>) factor space, illustrated here using factors A and B.</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
-<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
-<h2>Step 1: Identify relevant factors</h2>
-<p>Two options:</p>
-<ul>
-<li><p>A <strong><span class="math inline">\(2^{k}\)</span> full factorial (CRFD)</strong> design <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> with <span class="math inline">\(k=7\)</span> factors would take <span class="math inline">\(2^{k}=2^{7}=128\)</span> experimental runs.</p></li>
-<li><p>A <strong>resolution III fractional factorial (CRFF)</strong> design <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> with <span class="math inline">\(k=7\)</span> factors and <span class="math inline">\(p=4\)</span> generators would take <span class="math inline">\(2^{k-p} = 2^{7-4} = 8\)</span> experimental runs.</p></li>
-</ul>
-<p>Benefits:</p>
-<ul>
-<li><p>A <strong><span class="math inline">\(2^{k}\)</span> CRFD</strong> design allows you to estimate an intercept, all <span class="math inline">\(7\)</span> main effects, all <span class="math inline">\(21\)</span> two-way interactions, all <span class="math inline">\(7\)</span> pure quadratic terms, and more.</p></li>
-<li><p>A <strong>resolution III CRFF</strong> design only allows you estimate an intercept, and all <span class="math inline">\(7\)</span> main effects</p></li>
-</ul>
-<aside class="notes">
-<ul>
-<li>CAREFUL resolution III CRFF has main effects aliased with some 2fi</li>
-</ul>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>there is so much <strong>parameter space</strong> to explore!</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -506,9 +473,54 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
+<section id="motivating-example-3" class="slide level2" style="font-size:60%;">
+<h2>Motivating example</h2>
+<p>To facilitate the explanation, we focus on factors A and B.</p>
+
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>But the ideas presented here apply equally to the remaining factors.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="motivating-example-4" class="slide level2" style="font-size:60%;">
+<h2>Motivating example</h2>
+<p>And in a restricted region within the seven factor space, illustrated using factors A and B.</p>
+
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+<section id="motivating-example-5" class="slide level2" style="font-size:60%;">
+<h2>Motivating example</h2>
+<p>And in a restricted region within the seven factor space, illustrated using factors A and B.</p>
+
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
+<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
+<h2>Step 1: Identify relevant factors</h2>
+<p>Two options:</p>
+<ul>
+<li><p>A <strong><span class="math inline">\(2^{k}\)</span> full factorial design (CRFD)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>:</p>
+<ul>
+<li><u>Benefit:</u> it can estimate the intercept, all <span class="math inline">\(7\)</span> main effects, <span class="math inline">\(21\)</span> two-factor interactions, <span class="math inline">\(7\)</span> pure quadratic terms, and higher-order effects.</li>
+<li><u>Drawback:</u> it requires <span class="math inline">\(2^{k} = 2^{7} = 128\)</span> experimental runs.</li>
+</ul></li>
+<li><p>A <strong>resolution III fractional factorial design (CRFF)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>:</p>
+<ul>
+<li><u>Benefit:</u> requires only <span class="math inline">\(2^{k-p} = 2^{7-4} = 8\)</span> experimental runs when using <span class="math inline">\(p=4\)</span> generators.</li>
+<li><u>Drawbacks:</u> it estimates only the intercept and the <span class="math inline">\(7\)</span> main effects (no <span class="math inline">\(\text{df}\)</span> ) and main effects are <em>aliased</em> with two-factor interactions.</li>
+</ul></li>
+</ul>
+<p>Because we are <strong>screening</strong> we choose the second option.</p>
+</section>
 <section id="step-1-identify-relevant-factors-1" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>A <strong>resolution III CRFF</strong> design <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> with <span class="math inline">\(k=7\)</span> factors and <span class="math inline">\(p=4\)</span> generators, have the following characteristics:</p>
+<p>The chosen <strong>resolution III CRFF design</strong> have the following characteristics:</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><aside class="notes">
 <ul>
@@ -543,7 +555,7 @@ Jose Manuel Rivera Espejo
 </section>
 <section id="step-1-identify-relevant-factors-2" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>How a <strong>resolution III CRFF</strong> looks like?</p>
+<p>But how does it looks like in the factor space?</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>This design happen at every combination of the <span class="math inline">\(7\)</span> factors</p>
@@ -561,7 +573,7 @@ Jose Manuel Rivera Espejo
 </section>
 <section id="step-1-identify-relevant-factors-3" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>After conducting the experiments, we test which factors are relevant:</p>
+<p>After conducting the experiments, which factors are relevant?</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -590,10 +602,9 @@ F-statistic:   NaN on 7 and 0 DF,  p-value: NA</code></pre>
 </section>
 <section id="step-1-identify-relevant-factors-4" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>Thanks to the Central Limit Theorem (CLT), we can still identify significant effects.</p>
+<p>Thanks the Central Limit Theorem (CLT) we can still find which factors are relevant.</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"><aside class="notes">
-<p>We can use this plot thanks to CLT</p>
 <p>NO relevance of <span class="math inline">\(D\)</span>, which could indicate the presence of 2fi between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -624,7 +635,7 @@ F-statistic:   NaN on 7 and 0 DF,  p-value: NA</code></pre>
 </section>
 <section id="step-1-identify-relevant-factors-5" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>After conducting the experiments, we test which factors are relevant:</p>
+<p>Reducing the model to relevant main effects,</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -652,7 +663,7 @@ F-statistic: 69.76 on 3 and 4 DF,  p-value: 0.0006554</code></pre>
 </section>
 <section id="step-1-identify-relevant-factors-6" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>After conducting the experiments, we test which factors are relevant:</p>
+<p>Reducing the model to relevant main effects,</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -679,12 +690,40 @@ F-statistic: 106.2 on 2 and 5 DF,  p-value: 8.024e-05</code></pre>
 </section>
 <section id="step-2-steepest-ascend" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
-<p>In order to use methods from <strong>Response Surface Methodology (RMS)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> we need to add some center points and build a model that describes the yield space:</p>
+<p>To build a model that describes the yield space, we need to add some <em>center points</em>,</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-1" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
-<p>After collecting the outcome resulting from the experimental design we see:</p>
+<p>And we check these points are no different than the rest,</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm.default(formula = Y ~ A + B + block, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.5394 -0.7102  0.2453  0.6347  1.6182 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 20.42354    1.31090  15.580 2.87e-07 ***
+A            1.13388    0.41454   2.735   0.0256 *  
+B            1.22248    0.08291  14.745 4.40e-07 ***
+blockscreen -1.29759    0.71801  -1.807   0.1084    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.173 on 8 degrees of freedom
+Multiple R-squared:  0.9661,    Adjusted R-squared:  0.9534 
+F-statistic: 76.05 on 3 and 8 DF,  p-value: 3.196e-06</code></pre>
+</div>
+</div>
+</section>
+<section id="step-2-steepest-ascend-2" class="slide level2" style="font-size:60%;">
+<h2>Step 2: Steepest ascend</h2>
+<p>We model the <em>local</em> yield surface using <strong>response surface methodology (RSM)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -719,52 +758,53 @@ Corresponding increment in original units:
 0.6800372 0.7331776 </code></pre>
 </div>
 </div>
+</section>
+<section id="step-2-steepest-ascend-3" class="slide level2" style="font-size:60%;">
+<h2>Step 2: Steepest ascend</h2>
+<p>How does the space look like?</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Path of steepest ascent from ridge analysis:</code></pre>
 </div>
 </div>
-</section>
-<section id="step-2-steepest-ascend-2" class="slide level2" style="font-size:60%;">
-<h2>Step 2: Steepest ascend</h2>
-<p>How does the space look like?</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
-<section id="step-2-steepest-ascend-3" class="slide level2" style="font-size:60%;">
-<h2>Step 2: Steepest ascend</h2>
-<p>Now we proceed to ascend towards a maximum.</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-4" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
-<p>And we focus our attention on the highest yield area:</p>
+<p>Now we proceed to ascend towards a maximum,</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-5" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
-<p>And we focus our attention on the highest yield area:</p>
+<p>And we focus our attention on the highest yield area,</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<section id="step-2-steepest-ascend-6" class="slide level2" style="font-size:60%;">
+<h2>Step 2: Steepest ascend</h2>
+<p>And we focus our attention on the highest yield area,</p>
+
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="step-3-bayesian-optimization" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
 <p>Within this high-yield region, we implement <strong>Bayesian Optimization (BO)</strong> <span class="citation" data-cites="Sweet_2023">[<a href="#/references" role="doc-biblioref" onclick="">2</a>]</span>.</p>
 <p>Specifically:</p>
-<ul>
-<li><p>We use relevant <strong>initial training data</strong> from the steepest ascent procedure</p>
-<p>In this case, the three design points located within the high-yield region.</p></li>
-<li><p>We use a <strong>surrogate model</strong> to approximate the yield surface for a set of <strong>candidate data points</strong></p>
-<p>Here, a Gaussian Process with Radial Basis Function (RBF) kernel <span class="citation" data-cites="Rasmussen_et_al_2015 Nielsen_2023">[<a href="#/references" role="doc-biblioref" onclick="">3</a>, <a href="#/references" role="doc-biblioref" onclick="">4</a>]</span> is employed .</p></li>
-<li><p>We use an <strong>acquisition function</strong> to determine the next point to evaluate in the search space</p>
-<p>In this case, we use the Expected Improvement function (see illustration).</p></li>
-<li><p>We define a <strong>stopping criterion</strong> to determine when to terminate the search</p>
-<p>Because a central composite design would require <span class="math inline">\(2^2 = 4\)</span> factorial points, <span class="math inline">\(2^2 = 4\)</span> axial (face) points, and <span class="math inline">\(4\)</span> center points, for a total of <span class="math inline">\(12\)</span> experimental runs <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>, the optimization procedure will use <span class="math inline">\(8\)</span> runs.</p></li>
-</ul>
+<ol type="1">
+<li><p>We use relevant <em>initial training data</em>:</p>
+<p><span style="font-size:80%;"><strong>Three points from the steepest ascend procedure</strong> located within the high-yield region.</span></p></li>
+<li><p>We use a <em>surrogate model</em> to approximate the yield surface for a set of <em>candidate data points</em>:</p>
+<p><span style="font-size:80%;">A <strong>Gaussian Process with Radial Basis Function (RBF) kernel</strong> <span class="citation" data-cites="Rasmussen_et_al_2015 Nielsen_2023">[<a href="#/references" role="doc-biblioref" onclick="">3</a>, <a href="#/references" role="doc-biblioref" onclick="">4</a>]</span>.</span></p></li>
+<li><p>We use an <em>acquisition function</em> to determine the next point to evaluate in the search space:</p>
+<p><span style="font-size:80%;">The Expected Improvement (EI) function.</span></p></li>
+<li><p>We define a <em>stopping criterion</em> to determine when to terminate the search:</p>
+<p><span style="font-size:80%;">A central composite design <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> requires a total of <span class="math inline">\(12\)</span> runs: <span class="math inline">\(4\)</span> factorial points, <span class="math inline">\(4\)</span> axial (face) points, and <span class="math inline">\(4\)</span> center points.</span></p>
+<p><span style="font-size:80%;"><strong>Our BO procedure will use only <span class="math inline">\(8\)</span> runs.</strong></span></p></li>
+</ol>
 </section>
 <section id="step-3-bayesian-optimization-1" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
 <p>How does the training and candidate data look like?</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
 <section id="step-3-bayesian-optimization-2" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
 <p>TO DO</p>
@@ -777,7 +817,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 \]</span></p>
 <p>“unknown” <strong>true</strong> protein yield surface:</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"><aside class="notes">
 <ul>
 <li>In reality the <strong>true model</strong> is not available to us.</li>
 <li>However, simulation is useful to showcase the potential of the experimental strategies.</li>
@@ -802,7 +842,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 \]</span></p>
 <p>“unknown” <strong>true</strong> protein yield surface with screen, ascend, and optimization points:</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
 <section id="fair-principles-in-practice" class="slide level2" style="font-size:60%;">
 <h2>FAIR principles in practice</h2>
 <p>This presentation is built to be a <strong>research object</strong>, not just a slide deck.</p>
@@ -838,7 +878,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 </section>
 <section id="annex-additional-considerations" class="slide level2" style="font-size:60%;">
 <h2>Annex: additional considerations</h2>
-<p>In a real-world setting. the identification of those <span class="math inline">\(7\)</span> factors probably comes from experiments that seek to determine <strong>Sources of Variability</strong>. e.g.,</p>
+<p>In a real-world setting, the identification of those <span class="math inline">\(7\)</span> factors probably comes from experiments that seek to determine <strong>Sources of Variability</strong>. e.g.,</p>
 <ul>
 <li><strong>RSE (Random Statistical Error):</strong> Natural fluctuations in biological systems.</li>
 <li><strong>NSE (Non-Systematic Error):</strong> Potential issues with equipment or batch effects.</li>

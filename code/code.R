@@ -21,8 +21,10 @@ seed = 12345
 
 # Motivating example ####
 
-# Current operation conditions
-k = 7 # number of factors
+# number of factors
+k = 7 
+
+# Current operating conditions
 d0 = data.frame( matrix( c(2, 10, 5, 100, 10, 20, 20), nrow=1, ncol=7) )
 names(d0) = LETTERS[1:k]
 
@@ -141,7 +143,7 @@ plot( d0[,1:2], pch=19, col=rgb(0,0,0,0.5),
       ylim=c( 0, 20 ), xlim=c( 0, 4 ), 
       ylab=names(d0)[ 2 ], xlab=nam )
 points( d[,1:2], pch=19, col=rgb(0,0,1,0.5) )
-legend( 'topleft', legend=c( 'CRFF design','current OC' ),
+legend( 'topleft', legend=c( 'CRFF candidates','current OC' ),
         fill=c(rgb(0,0,1,0.5), rgb(0,0,0,0.5)), bty='n' )
 
 
@@ -186,14 +188,8 @@ for( i in 1:4 ){
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 plot( d[,1:2], pch=19, col=rgb(0,0,1,0.5),
-      ylim=c( 0, 20 ), xlim=c( 0, 4 ), 
-      ylab=names(d0)[ 2 ], xlab=nam )
+      ylim=c( 0, 20 ), xlim=c( 0, 4 ) ) 
 legend( 'topleft', legend=c( 'CRFF design +\ncenter points' ),
         fill=rgb(0,0,1,0.5), bty='n' )
 
@@ -205,7 +201,12 @@ d$Y[is.na(d$Y)] = true_protein_yield( X = as.matrix( d[is.na(d$Y),1:k] ) )
 
 ## 3. Analyze ####
 
-# model
+# model with blocks
+d$block = factor(d$block)
+model4 = lm( Y ~ A + B + block, data=d)
+summary(model4)
+
+# model for ascend
 model_rsm = rsm( Y ~ FO(A,B), data=d )
 summary(model_rsm)
 
@@ -231,11 +232,6 @@ while( check ){
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 20 ),
          xlim=c( 0, 4 ) )
@@ -252,11 +248,6 @@ abline( a=a, b=b, lty=2 )
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 100 ),
          xlim=c( 0, 14 ) )
@@ -272,11 +263,6 @@ abline( a=a, b=b, lty=2 )
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 100 ),
          xlim=c( 0, 14 ) )
@@ -292,11 +278,6 @@ rect( 11, 60, 14, 100, lty=2 )
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 60, 100 ),
          xlim=c( 11, 14 ) )
@@ -315,62 +296,98 @@ text( d[ d$block=='ascend', 1:2 ] - 0.1,
 
 # initial training points
 dBO = tail(d, 3)
-x_train = dBO[, c('A','B') ]
-y_train = dBO$Y
 
 # prediction points
-A = seq(11,14,by=0.2)
-B = seq(60,100,by=5)
+A = seq( 11, 14, by = 0.1 )
+B = seq( 60, 100, by = 5 )
 x_predict = data.frame( expand.grid( A=A, B=B ) )
 
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
-plot( d[, 1:2 ], 
-        pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ),
-        xlim=c( 10.95, 14.05 ) )
-text( d[ d$block=='ascend', 1:2 ] - 0.1, 
-      labels = round( d$Y[ d$block=='ascend'],1) )
-points( x_predict, pch=19, col=rgb(0,0,1,0.5) )
+plot( dBO[, 1:2 ], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 59, 115 ),
+      xlim=c( 10.95, 14.05 ) )
+text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
+points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
 legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
         fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5) ), bty='n' )
 
-d
 
 
 ## 2. Measure and Analyze ####
 
-# analyze
-post = gaussian_process_regression( 
-  X_train = x_train, 
-  X_predict = x_predict, 
-  Y_train = y_train, 
-  l=1, sigma_f=1, noise=1e-8 )
+n_runs = 12
 
-# plot
-plot( d[, 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-      ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-text( d[ d$block=='ascend', 1:2 ] - 0.1, 
-      labels = round( d$Y[ d$block=='ascend'],1) )
-points( x_predict, pch=19, col=rgb(0,0,1,0.5) )
-legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5) ), bty='n' )
+# procedure
+for( n in 1:n_runs ){ 
+  
+  # posterior predictions
+  post_predict = gaussian_process_regression( 
+    X_train = dBO[,1:2], 
+    X_predict = x_predict, 
+    Y_train = dBO$Y, 
+    l=1, sigma_f=1, noise=1e-8 )
+  
+  # lower confidence bound
+  LCB = lower_confidence_bound(
+    post = post_predict,
+    Y_train = dBO$Y, 
+    lambda = 0.5 )
+  
+  # add point to list of training data
+  Xn = data.frame( x_predict[which.max(LCB),], dBO[1,3:7] )
+  set.seed( seed )
+  Yn = true_protein_yield( X = as.matrix( Xn ) )
+  dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='BO' ) )
+  x_predict = x_predict[-which.max(LCB),] # remove selected point
+  
+  # plot
+  png( file.path( here(), 'figures', paste0('BO_run', n,'.png') ),
+       width=30, height=12, units='cm', res=200 )
+  
+  par(mfrow=c(1,2))
+  # for yield space
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], 
+        pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) )
+  text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
+  points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
+  mu = matrix( post$mu, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=mu, lwd=2, add=T, labcex=0.9,
+           col=hcl.colors(10, "Reds3") )
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col=rgb(1,0,0,0.5) )
+  text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ nrow(dBO) ],1) )
+  legend( 'topleft', bty='n',
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), rgb(1,0,0,0.5) ),
+          legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
+  
+  # for LCB
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], 
+        pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) )
+  text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
+  points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
+  lcb = matrix( LCB, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=lcb, lwd=2, add=T, labcex=0.9,
+           col=hcl.colors(10, "Spectral") )
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col=rgb(1,0,0,0.5) )
+  text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ nrow(dBO) ],1) )
+  legend( 'topleft', bty='n',
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), rgb(1,0,0,0.5) ),
+          legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
+  
+  dev.off()
+  
+}
 
-mu = matrix( post$mu, nrow=length(A), ncol=length(B), byrow=T)
-contour( x=A, y=B, z=mu, add=T, col=hcl.colors(10, "Spectral") )
 
-
-
-## 3. Analyze ####
-
-
-
+# validate
 
 
 
@@ -378,10 +395,8 @@ contour( x=A, y=B, z=mu, add=T, col=hcl.colors(10, "Spectral") )
 # The reality ####
 
 
-# setting seed for plot replication
-set.seed( seed )
-
 # simulation
+set.seed( seed )
 X = true_covariates( n=1000 )
 Y = true_protein_yield( X=X )
 dT = data.frame( X, Y)

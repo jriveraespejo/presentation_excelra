@@ -59,11 +59,11 @@ seed = 12345
 
 ## Motivating example {style="font-size:60%;"}
 
-**The context:**
+**Context:**
 
-- We have a high-value protein production process,
-- We known that seven ($7$) factors may potentially affect the process yield ($Y$),
-- We certain that our current operating conditions are "sub-optimal"
+- We study a high-value protein production process
+- Current operating conditions may be sub-optimal
+- Seven factors may affect the process yield ($Y$),
 
 | Variable | Factor           | Range       | Units |
 | :---     | :---             | :---        | :---  |
@@ -79,26 +79,24 @@ seed = 12345
 
 ## Motivating example {style="font-size:60%;"}
 
-**The conflict:** laboratory experiments are
+**Goal:** 
+
+- *Screen* relevant factors that affect the process
+- Find the *optimal* yield
+
+
+**Constraint:** Minimize experimental runs, because laboratory experiments are:
 
 - Expensive
 - Time-consuming
 - Resource-constrained
-
-::: {.fragment}
-**The goal:** 
-
-- Identify relevant factors that affect the process (*screen*)
-- Find the "peak yield" (*optimize*)
-- **Restriction:** use as few runs as possible
-:::
 
 
 ---
 
 ## Motivating example {style="font-size:60%;"}
 
-Our current operating conditions are in a small parameter space, but there is so much **parameter space** to explore!
+What are our current operating conditions? 
 
 ```{r}
 #| echo: false
@@ -106,8 +104,10 @@ Our current operating conditions are in a small parameter space, but there is so
 #| code-fold: true
 #| code-summary: "code"
 
-## Current operation conditions ####
-k = 7 # number of factors
+# number of factors
+k = 7 
+
+# Current operating conditions
 d0 = data.frame( matrix( c(2, 10, 5, 100, 10, 20, 20), nrow=1, ncol=7) )
 names(d0) = LETTERS[1:k]
 
@@ -146,12 +146,16 @@ par( mfrow=c(1,1) )
 
 ```
 
+:::{.notes}
+there is so much **parameter space** to explore!
+:::
+
 
 ---
 
 ## Motivating example {style="font-size:60%;"}
 
-To facilitate the explanation, we focus on factors A and B; however, the ideas presented here apply equally to the remaining factors.
+To facilitate the explanation, we focus on factors A and B.
 
 ```{r}
 #| echo: false
@@ -173,12 +177,16 @@ text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 
 ```
 
+:::{.notes}
+But the ideas presented here apply equally to the remaining factors.
+:::
+
 
 ---
 
 ## Motivating example {style="font-size:60%;"}
 
-Moreover, we focus on a restricted region within the seven ($7$) factor space, illustrated here using factors A and B.
+And in a restricted region within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -205,7 +213,7 @@ text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 
 ## Motivating example {style="font-size:60%;"}
 
-Moreover, we focus on a restricted region within the seven ($7$) factor space, illustrated here using factors A and B.
+And in a restricted region within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -233,25 +241,24 @@ text( d0[,1:2] + 0.15, labels =round(d0$Y,1) )
 
 Two options: 
 
-- A **$2^{k}$ full factorial (CRFD)** design [@Lawson_2015] with $k=7$ factors would take $2^{k}=2^{7}=128$ experimental runs.
+- A **$2^{k}$ full factorial design  (CRFD)** [@Lawson_2015]:
+  
+  * [Benefit:]{.underline} it can estimate the intercept, all $7$ main effects, $21$ two-factor interactions, $7$ pure quadratic terms, and higher-order effects.
+  * [Drawback:]{.underline} it requires $2^{k} = 2^{7} = 128$ experimental runs.
 
-- A **resolution III fractional factorial (CRFF)** design [@Lawson_2015] with $k=7$ factors and $p=4$ generators would take $2^{k-p} = 2^{7-4} = 8$ experimental runs.
+- A **resolution III fractional factorial design (CRFF)** [@Lawson_2015]: 
+  
+  * [Benefit:]{.underline} requires only $2^{k-p} = 2^{7-4} = 8$ experimental runs when using $p=4$ generators. 
+  * [Drawbacks:]{.underline} it estimates only the intercept and the $7$ main effects (no $\text{df}$ ) and main effects are *aliased* with two-factor interactions.
 
-Benefits:
+Because we are **screening** we choose the second option.
 
-- A **$2^{k}$ CRFD** design allows you to estimate an intercept, all $7$ main effects, all $21$ two-way interactions, all $7$ pure quadratic terms, and more.
-
-- A **resolution III CRFF** design only allows you estimate an intercept, and all $7$ main effects
-
-:::{.notes}
-- CAREFUL resolution III CRFF has main effects aliased with some 2fi
-:::
 
 ---
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-A **resolution III CRFF** design [@Lawson_2015] with $k=7$ factors and $p=4$ generators, have the following characteristics:
+The chosen **resolution III CRFF design** have the following characteristics:
 
 ```{r}
 #| echo: false
@@ -290,7 +297,7 @@ aliases( lm( y~(.)^2, data=dsg) )
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-How a **resolution III CRFF** looks like?
+But how does it looks like in the factor space?
 
 ```{r}
 #| echo: false
@@ -331,9 +338,8 @@ plot( d0[,1:2], pch=19, col=rgb(0,0,0,0.5),
       ylim=c( 0, 20 ), xlim=c( 0, 4 ), 
       ylab=names(d0)[ 2 ], xlab=nam )
 points( d[,1:2], pch=19, col=rgb(0,0,1,0.5) )
-legend( 'topleft', legend=c( 'CRFF design','current OC' ),
+legend( 'topleft', legend=c( 'CRFF candidates','current OC' ),
         fill=c(rgb(0,0,1,0.5), rgb(0,0,0,0.5)), bty='n' )
-
 
 ```
 
@@ -346,7 +352,7 @@ This design happen at every combination of the $7$ factors
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-After conducting the experiments, we test which factors are relevant:
+After conducting the experiments, which factors are relevant?
 
 ```{r}
 #| echo: false
@@ -369,7 +375,7 @@ summary(model1)
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-Thanks to the Central Limit Theorem (CLT), we can still identify significant effects.
+Thanks the Central Limit Theorem (CLT) we can still find which factors are relevant.
 
 ```{r}
 #| echo: false
@@ -383,8 +389,6 @@ fullnormal( coef(model1), alpha=0.025 )
 ```
 
 ::: {.notes}
-We can use this plot thanks to CLT
-
 NO relevance of $D$, which could indicate the presence of 2fi between $A$ and $B$
 
 ```{r}
@@ -407,7 +411,7 @@ aliases( lm( y~(.)^2, data=dsg) )
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-After conducting the experiments, we test which factors are relevant:
+Reducing the model to relevant main effects,
 
 ```{r}
 #| echo: false
@@ -426,7 +430,7 @@ summary(model2)
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-After conducting the experiments, we test which factors are relevant:
+Reducing the model to relevant main effects,
 
 ```{r}
 #| echo: false
@@ -445,7 +449,7 @@ summary(model3)
 
 ## Step 2: Steepest ascend {style="font-size:60%;"}
 
-In order to use methods from **Response Surface Methodology (RMS)** [@Lawson_2015] we need to add some center points and build a model that describes the yield space:
+To build a model that describes the yield space, we need to add some *center points*,
 
 ```{r}
 #| echo: false
@@ -463,14 +467,8 @@ for( i in 1:4 ){
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 plot( d[,1:2], pch=19, col=rgb(0,0,1,0.5),
-      ylim=c( 0, 20 ), xlim=c( 0, 4 ), 
-      ylab=names(d0)[ 2 ], xlab=nam )
+      ylim=c( 0, 20 ), xlim=c( 0, 4 ) ) 
 legend( 'topleft', legend=c( 'CRFF design +\ncenter points' ),
         fill=rgb(0,0,1,0.5), bty='n' )
 
@@ -480,7 +478,7 @@ legend( 'topleft', legend=c( 'CRFF design +\ncenter points' ),
 
 ## Step 2: Steepest ascend {style="font-size:60%;"}
 
-After collecting the outcome resulting from the experimental design we see:
+And we check these points are no different than the rest, 
 
 ```{r}
 #| echo: false
@@ -492,11 +490,38 @@ After collecting the outcome resulting from the experimental design we see:
 set.seed( seed )
 d$Y[is.na(d$Y)] = true_protein_yield( X = as.matrix( d[is.na(d$Y),1:k] ) )
 
-# model
+# model with blocks
+d$block = factor(d$block)
+model4 = lm( Y ~ A + B + block, data=d)
+summary(model4)
+
+
+```
+
+---
+
+## Step 2: Steepest ascend {style="font-size:60%;"}
+
+We model the *local* yield surface using **response surface methodology (RSM)** [@Lawson_2015].
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+# model for ascend
 model_rsm = rsm( Y ~ FO(A,B), data=d )
 summary(model_rsm)
 
 ```
+
+
+---
+
+## Step 2: Steepest ascend {style="font-size:60%;"}
+
+How does the space look like?
 
 ```{r}
 #| echo: false
@@ -505,7 +530,7 @@ summary(model_rsm)
 #| code-summary: "code"
 
 # direction
-sa = steepest(model_rsm, dist=1, descent=F)
+sa = steepest( model_rsm, dist=1, descent=F )
 
 # new point
 new = d0
@@ -524,13 +549,6 @@ while( check ){
 
 ```
 
-
----
-
-## Step 2: Steepest ascend {style="font-size:60%;"}
-
-How does the space look like?
-
 ```{r}
 #| echo: false
 #| output: true
@@ -539,11 +557,6 @@ How does the space look like?
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 20 ),
          xlim=c( 0, 4 ) )
@@ -563,7 +576,7 @@ abline( a=a, b=b, lty=2 )
 
 ## Step 2: Steepest ascend {style="font-size:60%;"}
 
-Now we proceed to ascend towards a maximum.
+Now we proceed to ascend towards a maximum,
 
 ```{r}
 #| echo: false
@@ -573,11 +586,6 @@ Now we proceed to ascend towards a maximum.
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 100 ),
          xlim=c( 0, 14 ) )
@@ -596,7 +604,7 @@ abline( a=a, b=b, lty=2 )
 
 ## Step 2: Steepest ascend {style="font-size:60%;"}
 
-And we focus our attention on the highest yield area:
+And we focus our attention on the highest yield area,
 
 ```{r}
 #| echo: false
@@ -606,11 +614,6 @@ And we focus our attention on the highest yield area:
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 0, 100 ),
          xlim=c( 0, 14 ) )
@@ -630,7 +633,7 @@ rect( 11, 60, 14, 100, lty=2 )
 
 ## Step 2: Steepest ascend {style="font-size:60%;"}
 
-And we focus our attention on the highest yield area:
+And we focus our attention on the highest yield area,
 
 ```{r}
 #| echo: false
@@ -640,11 +643,6 @@ And we focus our attention on the highest yield area:
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
 contour( model_rsm, ~ A+B, image=T,
          ylim=c( 60, 100 ),
          xlim=c( 11, 14 ) )
@@ -663,21 +661,23 @@ Within this high-yield region, we implement **Bayesian Optimization (BO)** [@Swe
 
 Specifically:
 
-- We use relevant **initial training data** from the steepest ascent procedure
+1. We use relevant *initial training data*:
   
-    In this case, the three design points located within the high-yield region.
+    [**Three points from the steepest ascend procedure** located within the high-yield region.]{style="font-size:80%;"}
     
-- We use a **surrogate model** to approximate the yield surface for a set of **candidate data points**
+2. We use a *surrogate model* to approximate the yield surface for a set of *candidate data points*:
 
-    Here, a Gaussian Process with Radial Basis Function (RBF) kernel [@Rasmussen_et_al_2015; @Nielsen_2023] is employed .
+    [A **Gaussian Process with Radial Basis Function (RBF) kernel** [@Rasmussen_et_al_2015; @Nielsen_2023]. ]{style="font-size:80%;"}
 
-- We use an **acquisition function** to determine the next point to evaluate in the search space
+3. We use an *acquisition function* to determine the next point to evaluate in the search space:
 
-    In this case, we use the Expected Improvement function (see illustration).
+    [The Expected Improvement (EI) function.]{style="font-size:80%;"}
 
-- We define a **stopping criterion** to determine when to terminate the search
+4. We define a *stopping criterion* to determine when to terminate the search:
 
-    Because a central composite design would require $2^2 = 4$ factorial points, $2^2 = 4$ axial (face) points, and $4$ center points, for a total of $12$ experimental runs [@Lawson_2015], the optimization procedure will use $8$ runs.
+    [A central composite design [@Lawson_2015] requires a total of $12$ runs: $4$ factorial points, $4$ axial (face) points, and $4$ center points.]{style="font-size:80%;"}
+    
+    [**Our BO procedure will use only $8$ runs.**]{style="font-size:80%;"}
 
 
 ---
@@ -694,12 +694,11 @@ How does the training and candidate data look like?
 
 # initial training points
 dBO = tail(d, 3)
-x_train = dBO[, c('A','B') ]
-y_train = dBO$Y
 
 # prediction points
-x_predict = data.frame( 
-  expand.grid( A=seq(11,14,by=0.2), B=seq(60,100,by=5)) )
+A = seq( 11, 14, by = 0.1 )
+B = seq( 60, 100, by = 5 )
+x_predict = data.frame( expand.grid( A=A, B=B ) )
 
 ```
 
@@ -711,17 +710,11 @@ x_predict = data.frame(
 
 # plot
 par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
-plot( d[, 1:2 ], 
-        pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ),
-        xlim=c( 10.95, 14.05 ) )
-text( d[ d$block=='ascend', 1:2 ] - 0.1, 
-      labels = round( d$Y[ d$block=='ascend'],1) )
+plot( dBO[, 1:2 ], 
+      pch=19, col=rgb(0,0,0,0.5),
+      ylim=c( 59, 115 ),
+      xlim=c( 10.95, 14.05 ) )
+text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
 points( x_predict, pch=19, col=rgb(0,0,1,0.5) )
 legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
         fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5) ), bty='n' )
@@ -754,10 +747,8 @@ $$
 #| code-fold: true
 #| code-summary: "code"
 
-# setting seed for plot replication
-set.seed( seed )
-
 # simulation
+set.seed( seed )
 X = true_covariates( n=1000 )
 Y = true_protein_yield( X=X )
 dT = data.frame( X, Y)
@@ -851,7 +842,7 @@ To conclude I can say that,
 
 ## Annex: additional considerations {style="font-size:60%;"}
 
-In a real-world setting. the identification of those $7$ factors probably comes from experiments that seek to determine **Sources of Variability**. e.g.,
+In a real-world setting, the identification of those $7$ factors probably comes from experiments that seek to determine **Sources of Variability**. e.g.,
 
 * **RSE (Random Statistical Error):** Natural fluctuations in biological systems.
 * **NSE (Non-Systematic Error):** Potential issues with equipment or batch effects.
@@ -867,6 +858,7 @@ What happens when the problem grows?
     * Empirical models (RSM/BO) are dangerous outside their tested range.
     * If we must predict outside our data, we shift toward **Theoretical/Mechanistic Models** based on biological first principles.
 
+---
 
 ## References {style="font-size:60%;"}
 
