@@ -254,19 +254,6 @@ Two options:
 Because we are **screening** we choose the second option.
 
 :::{.notes}
-Three principles
-
-a. Effect Sparsity-Pareto S(P): 
-    
-    around 80% of the variability is explained by 20% of the factors
-
-b. Hierarchical ordering H: 
-
-    main effects are more likely to be important than two-factor interactions, and this more important than three-factor interactions and so on.
-    
-c. Heredity-Marginality H(M): 
-
-    usually interactions occur between factors where at least one of the two main effects are significant.
 :::
 
 ---
@@ -291,7 +278,6 @@ colormap(dsg, mod=2)
 ```
 
 :::{.notes}
-- resolution III CRFF: main effects are aliased with 2fi
 
 ```{r}
 #| echo: false
@@ -305,6 +291,22 @@ y = runif( nrow(dsg), 0, 1)
 aliases( lm( y~(.)^2, data=dsg) )
 
 ```
+
+Three principles
+
+a. Effect Sparsity-Pareto S(P): 
+    
+    around 80% of the variability is explained by 20% of the factors
+
+b. Hierarchical ordering H: 
+
+    main effects are more likely to be important than two-factor interactions, and this more important than three-factor interactions and so on.
+    
+c. Heredity-Marginality H(M): 
+
+    usually interactions occur between factors where at least one of the two main effects are significant.
+
+
 :::
 
 
