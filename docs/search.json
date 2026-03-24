@@ -53,7 +53,7 @@
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nTwo options:\n\nA \\(2^{k}\\) full factorial design (CRFD) [1]:\n\nBenefit: it can estimate the intercept, all \\(7\\) main effects, \\(21\\) two-factor interactions, \\(7\\) pure quadratic terms, and higher-order effects.\nDrawback: it requires \\(2^{k} = 2^{7} = 128\\) experimental runs.\n\nA resolution III fractional factorial design (CRFF) [1]:\n\nBenefit: requires only \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs when using \\(p=4\\) generators.\nDrawbacks: it estimates only the intercept and the \\(7\\) main effects (no \\(\\text{df}\\) ) and main effects are aliased with two-factor interactions.\n\n\nBecause we are screening we choose the second option."
+    "text": "Step 1: Identify relevant factors\nTwo options:\n\nA \\(2^{k}\\) full factorial design (CRFD) [1]:\n\nBenefit: estimates the intercept, all \\(7\\) main effects, \\(21\\) two-factor interactions, \\(7\\) pure quadratic terms, and higher-order effects.\nDrawback: requires \\(2^{k} = 2^{7} = 128\\) experimental runs.\n\nA resolution III fractional factorial design (CRFF) [1]:\n\nBenefit: requires only \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs when using \\(p=4\\) generators.\nDrawbacks: estimates only the intercept and the \\(7\\) main effects, has no \\(\\text{df}\\), and main effects are aliased with two-factor interactions.\n\n\nBecause we are screening we choose the second option."
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
@@ -151,7 +151,7 @@
     "href": "RSM_and_BO.html#step-3-bayesian-optimization",
     "title": "Optimizing Protein Yield",
     "section": "Step 3: Bayesian Optimization",
-    "text": "Step 3: Bayesian Optimization\nWithin this high-yield region, we implement Bayesian Optimization (BO) [2].\nSpecifically:\n\nWe use relevant initial training data:\nThree points from the steepest ascend procedure located within the high-yield region.\nWe use a surrogate model to approximate the yield surface for a set of candidate data points:\nA Gaussian Process with Radial Basis Function (RBF) kernel [3, 4].\nWe use an acquisition function to determine the next point to evaluate in the search space:\nThe Expected Improvement (EI) function.\nWe define a stopping criterion to determine when to terminate the search:\nA central composite design [1] requires a total of \\(12\\) runs: \\(4\\) factorial points, \\(4\\) axial (face) points, and \\(4\\) center points.\nOur BO procedure will use only \\(8\\) runs."
+    "text": "Step 3: Bayesian Optimization\nWithin this high-yield region, we implement Bayesian Optimization (BO) [2, 3].\nSpecifically:\n\nWe use relevant initial training data:\nThree points from the steepest ascend procedure located within the high-yield region.\nWe use a surrogate model to approximate the yield surface for a set of candidate data points:\nA Gaussian Process with Radial Basis Function (RBF) kernel [3, 4].\nWe use an acquisition function to determine the next point to evaluate in the search space:\nThe Lower Confidence Bound (LCB) function.\nWe define a stopping criterion to determine when to terminate the search:\nA central composite design [1] requires a total of \\(12\\) runs: \\(4\\) factorial points, \\(4\\) axial (face) points, and \\(4\\) center points.\nOur BO procedure will use only \\(8\\) runs."
   },
   {
     "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-1",
@@ -165,7 +165,56 @@
     "href": "RSM_and_BO.html#step-3-bayesian-optimization-2",
     "title": "Optimizing Protein Yield",
     "section": "Step 3: Bayesian Optimization",
-    "text": "Step 3: Bayesian Optimization\nTO DO"
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-3",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-3",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-4",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-4",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-5",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-5",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-6",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-6",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-7",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-7",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-8",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-8",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-3-bayesian-optimization-9",
+    "href": "RSM_and_BO.html#step-3-bayesian-optimization-9",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 3: Bayesian Optimization",
+    "text": "Step 3: Bayesian Optimization\nHow does the BO procedure progress?"
   },
   {
     "objectID": "RSM_and_BO.html#the-reality",
@@ -175,18 +224,11 @@
     "text": "The reality\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\n“unknown” true protein yield surface:\n\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
   },
   {
-    "objectID": "RSM_and_BO.html#the-reality-1",
-    "href": "RSM_and_BO.html#the-reality-1",
-    "title": "Optimizing Protein Yield",
-    "section": "The reality",
-    "text": "The reality\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\n“unknown” true protein yield surface with screen, ascend, and optimization points:"
-  },
-  {
     "objectID": "RSM_and_BO.html#fair-principles-in-practice",
     "href": "RSM_and_BO.html#fair-principles-in-practice",
     "title": "Optimizing Protein Yield",
     "section": "FAIR principles in practice",
-    "text": "FAIR principles in practice\nThis presentation is built to be a research object, not just a slide deck.\n\nFindable (F): Searchable text and structured metadata ensure the content is discoverable.\nNext step: Provision of a DOI via Zenodo or OSF.\nAccesible (A): Publicly hosted on GitHub.\nAnyone with an internet connection can retrieve the slides and underlying data.\nInteroperable (I): Built using Open Source (Quarto/R).\nSeamlessly integrates into any analysis workflow and automated pipelines.\nReusable (R): CC-BY 4.0 Licensed.\nIncludes all R dependencies and source code to fully replicate every simulation and analysis."
+    "text": "FAIR principles in practice\nThis presentation is built to be a research object, not just a slide deck.\n\nFindable (F): Searchable text and structured metadata ensure the content is discoverable.\nNext step: Provision of a DOI via Zenodo or OSF.\nAccesible (A): Publicly hosted on GitHub.\nAnyone with an internet connection can retrieve the slides and underlying data.\nInteroperable (I): Built using Open Source (Quarto/R).\nSeamlessly integrates into any analysis workflow and automated pipelines.\nReusable (R): BSD 3 Licensed.\nIncludes all R dependencies and source code to fully replicate every simulation and analysis."
   },
   {
     "objectID": "RSM_and_BO.html#thank-you",
@@ -221,6 +263,6 @@
     "href": "RSM_and_BO.html#references",
     "title": "Optimizing Protein Yield",
     "section": "References",
-    "text": "References\n\n\n1. Lawson J (2015) Design and analysis of experiments with r. Chapman; Hall/CRC\n\n\n2. Sweet D (2023) Experimentation for engineers. Manning Publications Co.\n\n\n3. Rasmussen CE, Williams CKI (2005) Gaussian processes for machine learning. The MIT Press\n\n\n4. Nielsen A (2023) Bayesian optimisation from scratch in r\n\n\n\n\n\n\nOptimizing Protein Yield: RSM with BO | Jose Manuel Rivera Espejo | Github Repository"
+    "text": "References\n\n\n1. Lawson J (2015) Design and analysis of experiments with r. Chapman; Hall/CRC\n\n\n2. Sweet D (2023) Experimentation for engineers. Manning Publications Co.\n\n\n3. Nielsen A (2023) Bayesian optimisation from scratch in r\n\n\n4. Rasmussen CE, Williams CKI (2005) Gaussian processes for machine learning. The MIT Press\n\n\n\n\n\n\nOptimizing Protein Yield: RSM with BO | Jose Manuel Rivera Espejo | Github Repository"
   }
 ]

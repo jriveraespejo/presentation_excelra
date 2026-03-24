@@ -252,7 +252,7 @@ lower_confidence_bound = function( post, lambda=1 ) {
   # post
 
   # return object
-  return( post$mu  + lambda * post$sigma )
+  return( post$mu  - lambda * post$sigma )
   
 }
 

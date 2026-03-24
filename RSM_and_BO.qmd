@@ -243,13 +243,13 @@ Two options:
 
 - A **$2^{k}$ full factorial design  (CRFD)** [@Lawson_2015]:
   
-  * [Benefit:]{.underline} it can estimate the intercept, all $7$ main effects, $21$ two-factor interactions, $7$ pure quadratic terms, and higher-order effects.
-  * [Drawback:]{.underline} it requires $2^{k} = 2^{7} = 128$ experimental runs.
+  * [Benefit:]{.underline} estimates the intercept, all $7$ main effects, $21$ two-factor interactions, $7$ pure quadratic terms, and higher-order effects.
+  * [Drawback:]{.underline} requires $2^{k} = 2^{7} = 128$ experimental runs.
 
 - A **resolution III fractional factorial design (CRFF)** [@Lawson_2015]: 
   
   * [Benefit:]{.underline} requires only $2^{k-p} = 2^{7-4} = 8$ experimental runs when using $p=4$ generators. 
-  * [Drawbacks:]{.underline} it estimates only the intercept and the $7$ main effects (no $\text{df}$ ) and main effects are *aliased* with two-factor interactions.
+  * [Drawbacks:]{.underline} estimates only the intercept and the $7$ main effects, has no $\text{df}$, and main effects are *aliased* with two-factor interactions.
 
 Because we are **screening** we choose the second option.
 
@@ -657,7 +657,7 @@ text( d[ d$block=='ascend', 1:2 ] - 0.1,
 
 ## Step 3: Bayesian Optimization {style="font-size:60%;"}
 
-Within this high-yield region, we implement **Bayesian Optimization (BO)** [@Sweet_2023].
+Within this high-yield region, we implement **Bayesian Optimization (BO)** [@Sweet_2023; @Nielsen_2023].
 
 Specifically:
 
@@ -671,7 +671,7 @@ Specifically:
 
 3. We use an *acquisition function* to determine the next point to evaluate in the search space:
 
-    [The Expected Improvement (EI) function.]{style="font-size:80%;"}
+    [The **Lower Confidence Bound (LCB)** function.]{style="font-size:80%;"}
 
 4. We define a *stopping criterion* to determine when to terminate the search:
 
@@ -715,9 +715,9 @@ plot( dBO[, 1:2 ],
       ylim=c( 59, 115 ),
       xlim=c( 10.95, 14.05 ) )
 text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
-points( x_predict, pch=19, col=rgb(0,0,1,0.5) )
+points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
 legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5) ), bty='n' )
+        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2) ), bty='n' )
 
 ```
 
@@ -726,7 +726,156 @@ legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
 
 ## Step 3: Bayesian Optimization {style="font-size:60%;"}
 
-TO DO
+How does the BO procedure progress?
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+available_indices = 1:nrow(x_predict)
+n_runs = 8
+
+# procedure
+for( n in 1:n_runs ){ 
+  
+  # posterior predictions for pre-selection
+  post_predict = gaussian_process_regression( 
+    X_train = dBO[,1:2], 
+    X_predict = x_predict, 
+    Y_train = dBO$Y, 
+    l=1, sigma_f=1, noise=1e-8 )
+  
+  # lower confidence bound
+  LCB_predict = lower_confidence_bound(
+    post = post_predict, lambda = 0.5 )
+  
+  # find the position within available_indices that has the minimum LCB
+  rel_idx = which.min( LCB_predict[available_indices] )
+  selected_idx = available_indices[rel_idx]
+  
+  # add point to list of training data
+  Xn = data.frame( x_predict[selected_idx, ], dBO[1, 3:7] )
+  set.seed( seed )
+  Yn = true_protein_yield( X = as.matrix( Xn ) )
+  dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='BO' ) )
+  
+  # remove the index we just sampled
+  available_indices = available_indices[-rel_idx]
+  
+  # plot
+  png( file.path( here(), 'figures', paste0('BO_run', n,'.png') ),
+       width=30, height=12, units='cm', res=150 )
+  
+  par(mfrow=c(1,2))
+  # for yield space
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ),
+        main=paste0( 'Protein Yield Surface, step ', n) )
+  text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
+  points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
+  
+  mu = matrix( post_predict$mu, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=mu, lwd=1.5, add=T, labcex=0.9, method='edge', 
+           col=hcl.colors(15, "Grays")[15:1] )
+  
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col='red' )
+  text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ nrow(dBO) ],1) )
+  legend( 'topleft', bty='n',
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
+          legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
+  
+  # for LCB
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) ,
+        main=paste0( 'LCB surface, step ', n) )
+  text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
+  points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
+  
+  lcb = matrix( LCB_predict, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=lcb, lwd=1.5, add=T, labcex=0.9, method='edge',
+           col=hcl.colors(15, "Grays")[15:1] )
+  
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col='red' )
+  text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
+        labels = round( dBO$Y[ nrow(dBO) ],1) )
+  legend( 'topleft', bty='n',
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
+          legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
+  
+  dev.off()
+  
+}
+
+```
+
+![](figures/BO_run1.png){width=650}
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run2.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run3.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run4.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run5.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run6.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run7.png){width=650}
+
+
+---
+
+## Step 3: Bayesian Optimization {style="font-size:60%;"}
+
+How does the BO procedure progress?
+
+![](figures/BO_run8.png){width=650}
 
 
 ---
@@ -747,37 +896,40 @@ $$
 #| code-fold: true
 #| code-summary: "code"
 
+# validate
+post_predict = gaussian_process_regression( 
+  X_train = dBO[,1:2], 
+  X_predict = x_predict, 
+  Y_train = dBO$Y, 
+  l=1, sigma_f=1, noise=1e-8 )
+
+Xn = data.frame( x_predict[which.max(post_predict$mu),], dBO[1, 3:7] )
+set.seed( seed )
+Yn = true_protein_yield( X = as.matrix( Xn ) )
+dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='validation' ) )
+
+# adding optimizing and validation points
+d = rbind( d, dBO[dBO$block!='ascend',] )
+
+```
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
 # simulation
 set.seed( seed )
 X = true_covariates( n=1000 )
 Y = true_protein_yield( X=X )
 dT = data.frame( X, Y)
 m = rsm( Y ~ FO(X1,X2) + TWI(X1,X2) + PQ(X1,X2), data=dT )
-
-# plot
-contour( m, ~ X1+X2, image=T,
-         xlabs=c("pH", "Temperature (ºC)") )
-abline( v=12, h=70, lty=2, col=rgb(0,0,0,0.3) )
+Y_hat = predict(m)
+X_max = X[which.max(Y_hat),]
+Y_max = Y_hat[which.max(Y_hat)]
 
 ```
-
-::: {.notes}
-- In reality the **true model** is not available to us.
-- However, simulation is useful to showcase the potential of the experimental strategies.
-:::
-
-
----
-
-## The reality {style="font-size:60%;"}
-
-The "unknown" **true model** for protein yield ($Y$) was:
-
-$$
-Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12)(B-70) + e; \quad \; e \sim N(0, 2)
-$$
-
-"unknown" **true** protein yield surface with screen, ascend, and optimization points:
 
 ```{r}
 #| echo: false
@@ -786,20 +938,30 @@ $$
 #| code-summary: "code"
 
 # plot
-contour( m, ~ X1+X2, image=T,
-         xlabs=c("pH", "Temperature (ºC)") )
-abline( v=12, h=70, lty=2, col=rgb(0,0,0,0.3) )
-points( d[ d$block!='ascend', 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-points( d[ d$block=='ascend', 1:2 ], pch=19, col=rgb(0,0,1,0.5),
-      ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-# points( d[ d$block=='BO', 1:2 ], pch=19, col=rgb(1,0,0,0.5),
-#         ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-legend( 'left', legend=c( 'Screen', 'Ascend', 'Optimize' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5), rgb(1,0,0,0.5) ), bty='n' )
+cols = hcl.colors(4,'mako')
+
+contour( m, ~ X1+X2, image=T, xlabs=c("pH", "Temperature (ºC)") )
+abline( v=X_max[1], h=X_max[2], lty=2, col=rgb(0,0,0,0.3) )
+points( x=X_max[1], y=X_max[2], pch=19, col='red')
+text( x=X_max[1]-0.5, y=X_max[2]-5, labels = round( Y_max ,1) )
+points( d[ d$block=='screen', 1:2 ], pch=19, col=cols[1] )
+points( d[ d$block=='center', 1:2 ], pch=19, col=cols[1] )
+points( d[ d$block=='ascend', 1:2 ], pch=19, col=cols[2] )
+points( d[ d$block=='BO', 1:2 ], pch=19, col=cols[3] )
+points( d[ d$block=='validation', 1:2 ], pch=19, col='orange' )
+text( x=d[ d$block=='validation', 1 ]-0.5, y=d[ d$block=='validation', 2 ]-5, 
+      labels = round( d$Y[ d$block=='validation' ],1) )
+legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
+        legend=c( 'Screen + center', 'Ascend', 'Optimize', 'Validation','Maximum' ) )
 
 
 ```
+
+::: {.notes}
+- In reality the **true model** is not available to us.
+- However, simulation is useful to showcase the potential of the experimental strategies.
+:::
+
 
 ---
 
@@ -819,7 +981,7 @@ This presentation is built to be a **research object**, not just a slide deck.
 
     Seamlessly integrates into any analysis workflow and automated pipelines.
     
-- **Reusable (R):** CC-BY 4.0 Licensed.
+- **Reusable (R):** BSD 3 Licensed.
 
     Includes all `R` dependencies and source code to fully replicate every simulation and analysis. 
 

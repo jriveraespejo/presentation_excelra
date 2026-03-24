@@ -312,18 +312,19 @@ plot( dBO[, 1:2 ],
 text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
 points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
 legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5) ), bty='n' )
+        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2) ), bty='n' )
 
 
 
 ## 2. Measure and Analyze ####
 
-n_runs = 12
+available_indices = 1:nrow(x_predict)
+n_runs = 8
 
 # procedure
 for( n in 1:n_runs ){ 
   
-  # posterior predictions
+  # posterior predictions for pre-selection
   post_predict = gaussian_process_regression( 
     X_train = dBO[,1:2], 
     X_predict = x_predict, 
@@ -331,55 +332,63 @@ for( n in 1:n_runs ){
     l=1, sigma_f=1, noise=1e-8 )
   
   # lower confidence bound
-  LCB = lower_confidence_bound(
-    post = post_predict,
-    Y_train = dBO$Y, 
-    lambda = 0.5 )
+  LCB_predict = lower_confidence_bound(
+    post = post_predict, lambda = 0.5 )
+  
+  # find the position within available_indices that has the minimum LCB
+  rel_idx = which.min( LCB_predict[available_indices] )
+  selected_idx = available_indices[rel_idx]
   
   # add point to list of training data
-  Xn = data.frame( x_predict[which.max(LCB),], dBO[1,3:7] )
+  Xn = data.frame( x_predict[selected_idx, ], dBO[1, 3:7] )
   set.seed( seed )
   Yn = true_protein_yield( X = as.matrix( Xn ) )
   dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='BO' ) )
-  x_predict = x_predict[-which.max(LCB),] # remove selected point
+  
+  # remove the index we just sampled
+  available_indices = available_indices[-rel_idx]
   
   # plot
   png( file.path( here(), 'figures', paste0('BO_run', n,'.png') ),
-       width=30, height=12, units='cm', res=200 )
+       width=30, height=12, units='cm', res=150 )
   
   par(mfrow=c(1,2))
   # for yield space
-  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], 
-        pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) )
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ),
+        main=paste0( 'Protein Yield Surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
   points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
-  mu = matrix( post$mu, nrow=length(A), ncol=length(B), byrow=T)
-  contour( x=A, y=B, z=mu, lwd=2, add=T, labcex=0.9,
-           col=hcl.colors(10, "Reds3") )
-  points( dBO[ nrow(dBO), 1:2 ], pch=19, col=rgb(1,0,0,0.5) )
+  
+  mu = matrix( post_predict$mu, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=mu, lwd=1.5, add=T, labcex=0.9, method='edge', 
+           col=hcl.colors(15, "Grays")[15:1] )
+  
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col='red' )
   text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ nrow(dBO) ],1) )
   legend( 'topleft', bty='n',
-          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), rgb(1,0,0,0.5) ),
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
           legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
   
   # for LCB
-  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], 
-        pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) )
+  plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
+        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) ,
+        main=paste0( 'LCB surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
   points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
-  lcb = matrix( LCB, nrow=length(A), ncol=length(B), byrow=T)
-  contour( x=A, y=B, z=lcb, lwd=2, add=T, labcex=0.9,
-           col=hcl.colors(10, "Spectral") )
-  points( dBO[ nrow(dBO), 1:2 ], pch=19, col=rgb(1,0,0,0.5) )
+  
+  lcb = matrix( LCB_predict, nrow=length(A), ncol=length(B), byrow=T)
+  contour( x=A, y=B, z=lcb, lwd=1.5, add=T, labcex=0.9, method='edge',
+           col=hcl.colors(15, "Grays")[15:1] )
+  
+  points( dBO[ nrow(dBO), 1:2 ], pch=19, col='red' )
   text( dBO[ nrow(dBO), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ nrow(dBO) ],1) )
   legend( 'topleft', bty='n',
-          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), rgb(1,0,0,0.5) ),
+          fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
           legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
   
   dev.off()
@@ -388,12 +397,23 @@ for( n in 1:n_runs ){
 
 
 # validate
+post_predict = gaussian_process_regression( 
+  X_train = dBO[,1:2], 
+  X_predict = x_predict, 
+  Y_train = dBO$Y, 
+  l=1, sigma_f=1, noise=1e-8 )
 
+Xn = data.frame( x_predict[which.max(post_predict$mu),], dBO[1, 3:7] )
+set.seed( seed )
+Yn = true_protein_yield( X = as.matrix( Xn ) )
+dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='validation' ) )
+
+# adding optimizing and validation points
+d = rbind( d, dBO[dBO$block!='ascend',] )
 
 
 
 # The reality ####
-
 
 # simulation
 set.seed( seed )
@@ -401,24 +421,24 @@ X = true_covariates( n=1000 )
 Y = true_protein_yield( X=X )
 dT = data.frame( X, Y)
 m = rsm( Y ~ FO(X1,X2) + TWI(X1,X2) + PQ(X1,X2), data=dT )
+Y_hat = predict(m)
+X_max = X[which.max(Y_hat),]
+Y_max = Y_hat[which.max(Y_hat)]
 
 
 # plot
-contour( m, ~ X1+X2, image=T,
-         xlabs=c("pH", "Temperature (ºC)") )
-abline( v=12, h=70, lty=2, col=rgb(0,0,0,0.3) )
+cols = hcl.colors(4,'mako')
 
-
-# plot
-contour( m, ~ X1+X2, image=T,
-         xlabs=c("pH", "Temperature (ºC)") )
-abline( v=12, h=70, lty=2, col=rgb(0,0,0,0.3) )
-points( d[ d$block!='ascend', 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-points( d[ d$block=='ascend', 1:2 ], pch=19, col=rgb(0,0,1,0.5),
-      ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-# points( d[ d$block=='BO', 1:2 ], pch=19, col=rgb(1,0,0,0.5),
-#         ylim=c( 59, 115 ), xlim=c( 10.95, 14.05 ) )
-legend( 'left', legend=c( 'Screen', 'Ascend', 'Optimize' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.5), rgb(1,0,0,0.5) ), bty='n' )
-
+contour( m, ~ X1+X2, image=T, xlabs=c("pH", "Temperature (ºC)") )
+abline( v=X_max[1], h=X_max[2], lty=2, col=rgb(0,0,0,0.3) )
+points( x=X_max[1], y=X_max[2], pch=19, col='red')
+text( x=X_max[1]-0.5, y=X_max[2]-5, labels = round( Y_max ,1) )
+points( d[ d$block=='screen', 1:2 ], pch=19, col=cols[1] )
+points( d[ d$block=='center', 1:2 ], pch=19, col=cols[1] )
+points( d[ d$block=='ascend', 1:2 ], pch=19, col=cols[2] )
+points( d[ d$block=='BO', 1:2 ], pch=19, col=cols[3] )
+points( d[ d$block=='validation', 1:2 ], pch=19, col='orange' )
+text( x=d[ d$block=='validation', 1 ]-0.5, y=d[ d$block=='validation', 2 ]-5, 
+      labels = round( d$Y[ d$block=='validation' ],1) )
+legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
+        legend=c( 'Screen + center', 'Ascend', 'Optimize', 'Validation','Maximum' ) )

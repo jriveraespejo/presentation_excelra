@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Jose Manuel Rivera Espejo">
-  <meta name="dcterms.date" content="2026-03-23">
+  <meta name="dcterms.date" content="2026-03-24">
   <title>Optimizing Protein Yield</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -365,7 +365,7 @@ Jose Manuel Rivera Espejo
 </div>
 </div>
 
-  <p class="date">23 March 2026</p>
+  <p class="date">24 March 2026</p>
 </section>
 <section id="the-contents" class="slide level2" style="font-size:60%;">
 <h2>The contents</h2>
@@ -507,13 +507,13 @@ Jose Manuel Rivera Espejo
 <ul>
 <li><p>A <strong><span class="math inline">\(2^{k}\)</span> full factorial design (CRFD)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>:</p>
 <ul>
-<li><u>Benefit:</u> it can estimate the intercept, all <span class="math inline">\(7\)</span> main effects, <span class="math inline">\(21\)</span> two-factor interactions, <span class="math inline">\(7\)</span> pure quadratic terms, and higher-order effects.</li>
-<li><u>Drawback:</u> it requires <span class="math inline">\(2^{k} = 2^{7} = 128\)</span> experimental runs.</li>
+<li><u>Benefit:</u> estimates the intercept, all <span class="math inline">\(7\)</span> main effects, <span class="math inline">\(21\)</span> two-factor interactions, <span class="math inline">\(7\)</span> pure quadratic terms, and higher-order effects.</li>
+<li><u>Drawback:</u> requires <span class="math inline">\(2^{k} = 2^{7} = 128\)</span> experimental runs.</li>
 </ul></li>
 <li><p>A <strong>resolution III fractional factorial design (CRFF)</strong> <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>:</p>
 <ul>
 <li><u>Benefit:</u> requires only <span class="math inline">\(2^{k-p} = 2^{7-4} = 8\)</span> experimental runs when using <span class="math inline">\(p=4\)</span> generators.</li>
-<li><u>Drawbacks:</u> it estimates only the intercept and the <span class="math inline">\(7\)</span> main effects (no <span class="math inline">\(\text{df}\)</span> ) and main effects are <em>aliased</em> with two-factor interactions.</li>
+<li><u>Drawbacks:</u> estimates only the intercept and the <span class="math inline">\(7\)</span> main effects, has no <span class="math inline">\(\text{df}\)</span>, and main effects are <em>aliased</em> with two-factor interactions.</li>
 </ul></li>
 </ul>
 <p>Because we are <strong>screening</strong> we choose the second option.</p>
@@ -786,7 +786,7 @@ Corresponding increment in original units:
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="step-3-bayesian-optimization" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
-<p>Within this high-yield region, we implement <strong>Bayesian Optimization (BO)</strong> <span class="citation" data-cites="Sweet_2023">[<a href="#/references" role="doc-biblioref" onclick="">2</a>]</span>.</p>
+<p>Within this high-yield region, we implement <strong>Bayesian Optimization (BO)</strong> <span class="citation" data-cites="Sweet_2023 Nielsen_2023">[<a href="#/references" role="doc-biblioref" onclick="">2</a>, <a href="#/references" role="doc-biblioref" onclick="">3</a>]</span>.</p>
 <p>Specifically:</p>
 <ol type="1">
 <li><p>We use relevant <em>initial training data</em>:</p>
@@ -794,7 +794,7 @@ Corresponding increment in original units:
 <li><p>We use a <em>surrogate model</em> to approximate the yield surface for a set of <em>candidate data points</em>:</p>
 <p><span style="font-size:80%;">A <strong>Gaussian Process with Radial Basis Function (RBF) kernel</strong> <span class="citation" data-cites="Rasmussen_et_al_2015 Nielsen_2023">[<a href="#/references" role="doc-biblioref" onclick="">3</a>, <a href="#/references" role="doc-biblioref" onclick="">4</a>]</span>.</span></p></li>
 <li><p>We use an <em>acquisition function</em> to determine the next point to evaluate in the search space:</p>
-<p><span style="font-size:80%;">The Expected Improvement (EI) function.</span></p></li>
+<p><span style="font-size:80%;">The <strong>Lower Confidence Bound (LCB)</strong> function.</span></p></li>
 <li><p>We define a <em>stopping criterion</em> to determine when to terminate the search:</p>
 <p><span style="font-size:80%;">A central composite design <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span> requires a total of <span class="math inline">\(12\)</span> runs: <span class="math inline">\(4\)</span> factorial points, <span class="math inline">\(4\)</span> axial (face) points, and <span class="math inline">\(4\)</span> center points.</span></p>
 <p><span style="font-size:80%;"><strong>Our BO procedure will use only <span class="math inline">\(8\)</span> runs.</strong></span></p></li>
@@ -807,8 +807,44 @@ Corresponding increment in original units:
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
 <section id="step-3-bayesian-optimization-2" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
-<p>TO DO</p>
-</section>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run1.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-3" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run2.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-4" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run3.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-5" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run4.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-6" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run5.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-7" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run6.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-8" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run7.png" width="650" class="r-stretch"></section>
+<section id="step-3-bayesian-optimization-9" class="slide level2" style="font-size:60%;">
+<h2>Step 3: Bayesian Optimization</h2>
+<p>How does the BO procedure progress?</p>
+
+<img data-src="figures/BO_run8.png" width="650" class="r-stretch"></section>
 <section id="the-reality" class="slide level2" style="font-size:60%;">
 <h2>The reality</h2>
 <p>The “unknown” <strong>true model</strong> for protein yield (<span class="math inline">\(Y\)</span>) was:</p>
@@ -817,7 +853,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 \]</span></p>
 <p>“unknown” <strong>true</strong> protein yield surface:</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"><aside class="notes">
 <ul>
 <li>In reality the <strong>true model</strong> is not available to us.</li>
 <li>However, simulation is useful to showcase the potential of the experimental strategies.</li>
@@ -834,15 +870,6 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
           display:block!important;
       }</style></aside>
 </section>
-<section id="the-reality-1" class="slide level2" style="font-size:60%;">
-<h2>The reality</h2>
-<p>The “unknown” <strong>true model</strong> for protein yield (<span class="math inline">\(Y\)</span>) was:</p>
-<p><span class="math display">\[
-Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12)(B-70) + e; \quad \; e \sim N(0, 2)
-\]</span></p>
-<p>“unknown” <strong>true</strong> protein yield surface with screen, ascend, and optimization points:</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
 <section id="fair-principles-in-practice" class="slide level2" style="font-size:60%;">
 <h2>FAIR principles in practice</h2>
 <p>This presentation is built to be a <strong>research object</strong>, not just a slide deck.</p>
@@ -853,7 +880,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <p>Anyone with an internet connection can retrieve the slides and underlying data.</p></li>
 <li><p><strong>Interoperable (I):</strong> Built using Open Source (Quarto/<code>R</code>).</p>
 <p>Seamlessly integrates into any analysis workflow and automated pipelines.</p></li>
-<li><p><strong>Reusable (R):</strong> CC-BY 4.0 Licensed.</p>
+<li><p><strong>Reusable (R):</strong> BSD 3 Licensed.</p>
 <p>Includes all <code>R</code> dependencies and source code to fully replicate every simulation and analysis.</p></li>
 </ul>
 </section>
@@ -905,11 +932,11 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <div id="ref-Sweet_2023" class="csl-entry" role="listitem">
 <div class="csl-left-margin">2. </div><div class="csl-right-inline">Sweet D (2023) <a href="">Experimentation for engineers</a>. Manning Publications Co.</div>
 </div>
-<div id="ref-Rasmussen_et_al_2015" class="csl-entry" role="listitem">
-<div class="csl-left-margin">3. </div><div class="csl-right-inline">Rasmussen CE, Williams CKI (2005) <a href="https://doi.org/10.7551/mitpress/3206.001.0001">Gaussian processes for machine learning</a>. The MIT Press</div>
-</div>
 <div id="ref-Nielsen_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">4. </div><div class="csl-right-inline">Nielsen A (2023) Bayesian optimisation from scratch in r</div>
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Nielsen A (2023) Bayesian optimisation from scratch in r</div>
+</div>
+<div id="ref-Rasmussen_et_al_2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Rasmussen CE, Williams CKI (2005) <a href="https://doi.org/10.7551/mitpress/3206.001.0001">Gaussian processes for machine learning</a>. The MIT Press</div>
 </div>
 </div>
 
