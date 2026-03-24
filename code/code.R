@@ -410,7 +410,7 @@ dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='validation' ) )
 
 # adding optimizing and validation points
 d = rbind( d, dBO[dBO$block!='ascend',] )
-
+rownames(d) = NULL
 
 
 # The reality ####
@@ -440,5 +440,11 @@ points( d[ d$block=='BO', 1:2 ], pch=19, col=cols[3] )
 points( d[ d$block=='validation', 1:2 ], pch=19, col='orange' )
 text( x=d[ d$block=='validation', 1 ]-0.5, y=d[ d$block=='validation', 2 ]-5, 
       labels = round( d$Y[ d$block=='validation' ],1) )
+text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
         legend=c( 'Screen + center', 'Ascend', 'Optimize', 'Validation','Maximum' ) )
+
+
+# report the whole process
+d
+

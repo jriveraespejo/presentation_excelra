@@ -11,14 +11,14 @@
     "href": "RSM_and_BO.html#motivating-example",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\nContext:\n\nWe study a high-value protein production process\nCurrent operating conditions may be sub-optimal\nSeven factors may affect the process yield (\\(Y\\)),\n\n\n\n\nVariable\nFactor\nRange\nUnits\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%"
+    "text": "Motivating example\nContext:\n\nInterested in high-value protein production process\nSubject matter experts think the current operating conditions may be sub-optimal\nSubject matter experts have identified seven (\\(7\\)) factors may affect the process yield (\\(Y\\)),\n\n\n\n\nVariable\nFactor\nRange\nUnits\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example-1",
     "href": "RSM_and_BO.html#motivating-example-1",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\nGoal:\n\nScreen relevant factors that affect the process\nFind the optimal yield\n\nConstraint: Minimize experimental runs, because laboratory experiments are:\n\nExpensive\nTime-consuming\nResource-constrained"
+    "text": "Motivating example\nGoal:\n\nScreen relevant factors that affect the process\nFind the optimal yield\n\nConstraint: Minimize experimental runs, because laboratory experiments are:\n\nExpensive\nTime-consuming\nResource-consuming"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example-2",
@@ -35,64 +35,64 @@
     "text": "Motivating example\nTo facilitate the explanation, we focus on factors A and B.\n\n\nBut the ideas presented here apply equally to the remaining factors."
   },
   {
-    "objectID": "RSM_and_BO.html#motivating-example-4",
-    "href": "RSM_and_BO.html#motivating-example-4",
-    "title": "Optimizing Protein Yield",
-    "section": "Motivating example",
-    "text": "Motivating example\nAnd in a restricted region within the seven factor space, illustrated using factors A and B."
-  },
-  {
-    "objectID": "RSM_and_BO.html#motivating-example-5",
-    "href": "RSM_and_BO.html#motivating-example-5",
-    "title": "Optimizing Protein Yield",
-    "section": "Motivating example",
-    "text": "Motivating example\nAnd in a restricted region within the seven factor space, illustrated using factors A and B."
-  },
-  {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nTwo options:\n\nA \\(2^{k}\\) full factorial design (CRFD) [1]:\n\nBenefit: estimates the intercept, all \\(7\\) main effects, \\(21\\) two-factor interactions, \\(7\\) pure quadratic terms, and higher-order effects.\nDrawback: requires \\(2^{k} = 2^{7} = 128\\) experimental runs.\n\nA resolution III fractional factorial design (CRFF) [1]:\n\nBenefit: requires only \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs when using \\(p=4\\) generators.\nDrawbacks: estimates only the intercept and the \\(7\\) main effects, has no \\(\\text{df}\\), and main effects are aliased with two-factor interactions.\n\n\nBecause we are screening we choose the second option."
+    "text": "Step 1: Identify relevant factors\nSubject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B."
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nThe chosen resolution III CRFF design have the following characteristics:\n\n\n\nresolution III CRFF: main effects are aliased with 2fi\n\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
+    "text": "Step 1: Identify relevant factors\nSubject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B."
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-2",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nBut how does it looks like in the factor space?\n\n\nThis design happen at every combination of the \\(7\\) factors"
+    "text": "Step 1: Identify relevant factors\nTwo options:\n\nA \\(2^{k}\\) full factorial design (CRFD) [1]:\n\nBenefit: estimates the intercept, all \\(7\\) main effects, \\(21\\) two-factor interactions, \\(7\\) pure quadratic terms, and higher-order effects.\nDrawback: requires \\(2^{k} = 2^{7} = 128\\) experimental runs.\n\nA resolution III fractional factorial design (CRFF) [1]:\n\nBenefit: requires only \\(2^{k-p} = 2^{7-4} = 8\\) experimental runs when using \\(p=4\\) generators.\nDrawbacks: estimates only the intercept and the \\(7\\) main effects, has no \\(\\text{df}\\), and main effects are aliased with two-factor interactions.\n\n\nBecause we are screening we choose the second option.\n\nThree principles\n\nEffect Sparsity-Pareto S(P):\naround 80% of the variability is explained by 20% of the factors\nHierarchical ordering H:\nmain effects are more likely to be important than two-factor interactions, and this more important than three-factor interactions and so on.\nHeredity-Marginality H(M):\nusually interactions occur between factors where at least one of the two main effects are significant."
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-3",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, which factors are relevant?\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C + D + E + F + G, data = d)\n\nResiduals:\nALL 8 residuals are 0: no residual degrees of freedom!\n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)\n(Intercept) 21.53697        NaN     NaN      NaN\nA            1.13388        NaN     NaN      NaN\nB            1.22248        NaN     NaN      NaN\nC           -0.40987        NaN     NaN      NaN\nD            0.01028        NaN     NaN      NaN\nE            0.02701        NaN     NaN      NaN\nF           -0.06552        NaN     NaN      NaN\nG           -0.01745        NaN     NaN      NaN\n\nResidual standard error: NaN on 0 degrees of freedom\nMultiple R-squared:      1, Adjusted R-squared:    NaN \nF-statistic:   NaN on 7 and 0 DF,  p-value: NA"
+    "text": "Step 1: Identify relevant factors\nThe chosen resolution III CRFF design have the following characteristics:\n\n\n\nresolution III CRFF: main effects are aliased with 2fi\n\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-4",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nThanks the Central Limit Theorem (CLT) we can still find which factors are relevant.\n\n\nNO relevance of \\(D\\), which could indicate the presence of 2fi between \\(A\\) and \\(B\\)\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
+    "text": "Step 1: Identify relevant factors\nBut how does it looks like in the factor space?\n\n\nThis design happen at every combination of the \\(7\\) factors"
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-5",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nReducing the model to relevant main effects,\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C, data = d)\n\nResiduals:\n      1       2       3       4       5       6       7       8 \n 0.4509  0.1020 -1.4785  1.2083  0.8594 -0.1808  0.1681 -1.1295 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 21.17531    2.51118   8.432 0.001083 ** \nA            1.13388    0.43066   2.633 0.058013 .  \nB            1.22248    0.08613  14.193 0.000143 ***\nC           -0.40987    0.43066  -0.952 0.395132    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.218 on 4 degrees of freedom\nMultiple R-squared:  0.9812,    Adjusted R-squared:  0.9672 \nF-statistic: 69.76 on 3 and 4 DF,  p-value: 0.0006554"
+    "text": "Step 1: Identify relevant factors\nAfter conducting the experiments, which factors are relevant?\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C + D + E + F + G, data = d)\n\nResiduals:\nALL 8 residuals are 0: no residual degrees of freedom!\n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)\n(Intercept) 21.53697        NaN     NaN      NaN\nA            1.13388        NaN     NaN      NaN\nB            1.22248        NaN     NaN      NaN\nC           -0.40987        NaN     NaN      NaN\nD            0.01028        NaN     NaN      NaN\nE            0.02701        NaN     NaN      NaN\nF           -0.06552        NaN     NaN      NaN\nG           -0.01745        NaN     NaN      NaN\n\nResidual standard error: NaN on 0 degrees of freedom\nMultiple R-squared:      1, Adjusted R-squared:    NaN \nF-statistic:   NaN on 7 and 0 DF,  p-value: NA"
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors-6",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nThanks the Central Limit Theorem (CLT) we can still find which factors are relevant.\n\n\nNO relevance of \\(D\\), which could indicate the presence of 2fi between \\(A\\) and \\(B\\)\n\n\n[1] \"Aliases\"\n\n\n                    \n A = B:D = C:E = F:G\n B = A:D = C:F = E:G\n C = A:E = B:F = D:G\n D = A:B = C:G = E:F\n E = A:C = B:G = D:F\n F = A:G = B:C = D:E\n G = A:F = B:E = C:D"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-7",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-7",
+    "title": "Optimizing Protein Yield",
+    "section": "Step 1: Identify relevant factors",
+    "text": "Step 1: Identify relevant factors\nReducing the model to relevant main effects,\n\n\n\nCall:\nlm.default(formula = Y ~ A + B + C, data = d)\n\nResiduals:\n      1       2       3       4       5       6       7       8 \n 0.4509  0.1020 -1.4785  1.2083  0.8594 -0.1808  0.1681 -1.1295 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 21.17531    2.51118   8.432 0.001083 ** \nA            1.13388    0.43066   2.633 0.058013 .  \nB            1.22248    0.08613  14.193 0.000143 ***\nC           -0.40987    0.43066  -0.952 0.395132    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.218 on 4 degrees of freedom\nMultiple R-squared:  0.9812,    Adjusted R-squared:  0.9672 \nF-statistic: 69.76 on 3 and 4 DF,  p-value: 0.0006554"
+  },
+  {
+    "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-8",
+    "href": "RSM_and_BO.html#step-1-identify-relevant-factors-8",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
     "text": "Step 1: Identify relevant factors\nReducing the model to relevant main effects,\n\n\n\nCall:\nlm.default(formula = Y ~ A + B, data = d)\n\nResiduals:\n       1        2        3        4        5        6        7        8 \n 0.04108  0.51189 -1.06859  1.61822  0.44955 -0.59070  0.57797 -1.53941 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) 19.12595    1.27976  14.945 2.43e-05 ***\nA            1.13388    0.42659   2.658    0.045 *  \nB            1.22248    0.08532  14.329 2.98e-05 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.207 on 5 degrees of freedom\nMultiple R-squared:  0.977, Adjusted R-squared:  0.9678 \nF-statistic: 106.2 on 2 and 5 DF,  p-value: 8.024e-05"
@@ -222,6 +222,13 @@
     "title": "Optimizing Protein Yield",
     "section": "The reality",
     "text": "The reality\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\n“unknown” true protein yield surface:\n\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
+  },
+  {
+    "objectID": "RSM_and_BO.html#the-reality-1",
+    "href": "RSM_and_BO.html#the-reality-1",
+    "title": "Optimizing Protein Yield",
+    "section": "The reality",
+    "text": "The reality\nWe managed to achieve this level of optimization with \\(33\\) experimental runs:\n\n\n8 screening points,\n4 center points,\n12 steepest ascend points,\n8 optimization points,\n1 validation point\n\n\n\n\n      A         B C   D  E  F  G        Y      block\n1   3.0   5.00000 6  50 15 10 10 28.68106     screen\n2   1.0  15.00000 4  50 15 10 30 39.10893     screen\n3   3.0   5.00000 4  50  5 30 30 27.57139     screen\n4   3.0  15.00000 4 150  5 10 10 42.48301     screen\n5   1.0   5.00000 6 150  5 10 30 26.82177     screen\n6   3.0  15.00000 6 150 15 30 30 40.27409     screen\n7   1.0   5.00000 4 150 15 30 10 26.95020     screen\n8   1.0  15.00000 6  50  5 30 10 37.05763     screen\n9   2.0  10.00000 5 100 10 20 20 35.72106     center\n10  2.0  10.00000 5 100 10 20 20 35.96893     center\n11  2.0  10.00000 5 100 10 20 20 34.33139     center\n12  2.0  10.00000 5 100 10 20 20 33.64301     center\n13  3.0  10.92769 5 100 10 20 20 38.69539     ascend\n14  4.0  12.78308 5 100 10 20 20 42.66695     ascend\n15  5.0  15.56617 5 100 10 20 20 45.57423     ascend\n16  6.0  19.27694 5 100 10 20 20 50.22027     ascend\n17  7.0  23.91542 5 100 10 20 20 58.32829     ascend\n18  8.0  29.48158 5 100 10 20 20 59.88661     ascend\n19  9.0  35.97544 5 100 10 20 20 71.26416     ascend\n20 10.0  43.39700 5 100 10 20 20 75.56384     ascend\n21 11.0  51.74625 5 100 10 20 20 80.74307     ascend\n22 12.0  61.02319 5 100 10 20 20 83.09969     ascend\n23 13.0  71.22783 5 100 10 20 20 86.01014     ascend\n24 14.0  82.36016 5 100 10 20 20 88.00118     ascend\n25 14.0  60.00000 5 100 10 20 20 82.12106         BO\n26 13.9  60.00000 5 100 10 20 20 82.37706         BO\n27 11.0 100.00000 5 100 10 20 20 66.32106         BO\n28 11.0  90.00000 5 100 10 20 20 77.32106         BO\n29 14.0  95.00000 5 100 10 20 20 78.62106         BO\n30 11.0  80.00000 5 100 10 20 20 84.32106         BO\n31 14.0 100.00000 5 100 10 20 20 74.12106         BO\n32 11.1 100.00000 5 100 10 20 20 66.69706         BO\n33 14.0  75.00000 5 100 10 20 20 86.62106 validation"
   },
   {
     "objectID": "RSM_and_BO.html#fair-principles-in-practice",

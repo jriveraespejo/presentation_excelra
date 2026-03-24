@@ -61,9 +61,9 @@ seed = 12345
 
 **Context:**
 
-- We study a high-value protein production process
-- Current operating conditions may be sub-optimal
-- Seven factors may affect the process yield ($Y$),
+- Interested in high-value protein production process
+- Subject matter experts think the current operating conditions may be sub-optimal
+- Subject matter experts have identified seven ($7$) factors may affect the process yield ($Y$),
 
 | Variable | Factor           | Range       | Units |
 | :---     | :---             | :---        | :---  |
@@ -81,15 +81,15 @@ seed = 12345
 
 **Goal:** 
 
-- *Screen* relevant factors that affect the process
-- Find the *optimal* yield
+1. *Screen* relevant factors that affect the process
+2. Find the *optimal* yield
 
 
 **Constraint:** Minimize experimental runs, because laboratory experiments are:
 
 - Expensive
 - Time-consuming
-- Resource-constrained
+- Resource-consuming
 
 
 ---
@@ -184,9 +184,9 @@ But the ideas presented here apply equally to the remaining factors.
 
 ---
 
-## Motivating example {style="font-size:60%;"}
+## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-And in a restricted region within the seven factor space, illustrated using factors A and B.
+Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -211,9 +211,9 @@ text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 
 ---
 
-## Motivating example {style="font-size:60%;"}
+## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-And in a restricted region within the seven factor space, illustrated using factors A and B.
+Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -253,6 +253,21 @@ Two options:
 
 Because we are **screening** we choose the second option.
 
+:::{.notes}
+Three principles
+
+a. Effect Sparsity-Pareto S(P): 
+    
+    around 80% of the variability is explained by 20% of the factors
+
+b. Hierarchical ordering H: 
+
+    main effects are more likely to be important than two-factor interactions, and this more important than three-factor interactions and so on.
+    
+c. Heredity-Marginality H(M): 
+
+    usually interactions occur between factors where at least one of the two main effects are significant.
+:::
 
 ---
 
@@ -910,6 +925,7 @@ dBO = rbind( dBO, data.frame( Xn, Y=Yn, block='validation' ) )
 
 # adding optimizing and validation points
 d = rbind( d, dBO[dBO$block!='ascend',] )
+rownames(d) = NULL
 
 ```
 
@@ -951,6 +967,7 @@ points( d[ d$block=='BO', 1:2 ], pch=19, col=cols[3] )
 points( d[ d$block=='validation', 1:2 ], pch=19, col='orange' )
 text( x=d[ d$block=='validation', 1 ]-0.5, y=d[ d$block=='validation', 2 ]-5, 
       labels = round( d$Y[ d$block=='validation' ],1) )
+text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
         legend=c( 'Screen + center', 'Ascend', 'Optimize', 'Validation','Maximum' ) )
 
@@ -962,6 +979,29 @@ legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
 - However, simulation is useful to showcase the potential of the experimental strategies.
 :::
 
+
+---
+
+## The reality {style="font-size:60%;"}
+
+We managed to achieve this level of optimization with $33$ experimental runs:
+
+:::{style="font-size:80%;"}
+- `r sum(d$block=='screen')` screening points,
+- `r sum(d$block=='center')` center points,
+- `r sum(d$block=='ascend')` steepest ascend points,
+- `r sum(d$block=='BO')` optimization points,
+- `r sum(d$block=='validation')` validation point
+:::
+
+```{r}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| code-summary: "code"
+
+d
+```
 
 ---
 

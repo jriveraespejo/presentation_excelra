@@ -382,9 +382,9 @@ Jose Manuel Rivera Espejo
 <h2>Motivating example</h2>
 <p><strong>Context:</strong></p>
 <ul>
-<li>We study a high-value protein production process</li>
-<li>Current operating conditions may be sub-optimal</li>
-<li>Seven factors may affect the process yield (<span class="math inline">\(Y\)</span>),</li>
+<li>Interested in high-value protein production process</li>
+<li>Subject matter experts think the current operating conditions may be sub-optimal</li>
+<li>Subject matter experts have identified seven (<span class="math inline">\(7\)</span>) factors may affect the process yield (<span class="math inline">\(Y\)</span>),</li>
 </ul>
 <table>
 <thead>
@@ -444,15 +444,15 @@ Jose Manuel Rivera Espejo
 <section id="motivating-example-1" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
 <p><strong>Goal:</strong></p>
-<ul>
+<ol type="1">
 <li><em>Screen</em> relevant factors that affect the process</li>
 <li>Find the <em>optimal</em> yield</li>
-</ul>
+</ol>
 <p><strong>Constraint:</strong> Minimize experimental runs, because laboratory experiments are:</p>
 <ul>
 <li>Expensive</li>
 <li>Time-consuming</li>
-<li>Resource-constrained</li>
+<li>Resource-consuming</li>
 </ul>
 </section>
 <section id="motivating-example-2" class="slide level2" style="font-size:60%;">
@@ -491,17 +491,17 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
-<section id="motivating-example-4" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>And in a restricted region within the seven factor space, illustrated using factors A and B.</p>
+<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
+<h2>Step 1: Identify relevant factors</h2>
+<p>Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
-<section id="motivating-example-5" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>And in a restricted region within the seven factor space, illustrated using factors A and B.</p>
+<section id="step-1-identify-relevant-factors-1" class="slide level2" style="font-size:60%;">
+<h2>Step 1: Identify relevant factors</h2>
+<p>Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
-<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-2" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>Two options:</p>
 <ul>
@@ -517,8 +517,29 @@ Jose Manuel Rivera Espejo
 </ul></li>
 </ul>
 <p>Because we are <strong>screening</strong> we choose the second option.</p>
+<aside class="notes">
+<p>Three principles</p>
+<ol type="a">
+<li><p>Effect Sparsity-Pareto S(P):</p>
+<p>around 80% of the variability is explained by 20% of the factors</p></li>
+<li><p>Hierarchical ordering H:</p>
+<p>main effects are more likely to be important than two-factor interactions, and this more important than three-factor interactions and so on.</p></li>
+<li><p>Heredity-Marginality H(M):</p>
+<p>usually interactions occur between factors where at least one of the two main effects are significant.</p></li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="step-1-identify-relevant-factors-1" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-3" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>The chosen <strong>resolution III CRFF design</strong> have the following characteristics:</p>
 
@@ -553,7 +574,7 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
-<section id="step-1-identify-relevant-factors-2" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-4" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>But how does it looks like in the factor space?</p>
 
@@ -571,7 +592,7 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
-<section id="step-1-identify-relevant-factors-3" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-5" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>After conducting the experiments, which factors are relevant?</p>
 <div class="cell">
@@ -600,7 +621,7 @@ F-statistic:   NaN on 7 and 0 DF,  p-value: NA</code></pre>
 </div>
 </div>
 </section>
-<section id="step-1-identify-relevant-factors-4" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-6" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>Thanks the Central Limit Theorem (CLT) we can still find which factors are relevant.</p>
 
@@ -633,7 +654,7 @@ F-statistic:   NaN on 7 and 0 DF,  p-value: NA</code></pre>
           display:block!important;
       }</style></aside>
 </section>
-<section id="step-1-identify-relevant-factors-5" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-7" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>Reducing the model to relevant main effects,</p>
 <div class="cell">
@@ -661,7 +682,7 @@ F-statistic: 69.76 on 3 and 4 DF,  p-value: 0.0006554</code></pre>
 </div>
 </div>
 </section>
-<section id="step-1-identify-relevant-factors-6" class="slide level2" style="font-size:60%;">
+<section id="step-1-identify-relevant-factors-8" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>Reducing the model to relevant main effects,</p>
 <div class="cell">
@@ -869,6 +890,57 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</section>
+<section id="the-reality-1" class="slide level2" style="font-size:60%;">
+<h2>The reality</h2>
+<p>We managed to achieve this level of optimization with <span class="math inline">\(33\)</span> experimental runs:</p>
+<div style="font-size:80%;">
+<ul>
+<li>8 screening points,</li>
+<li>4 center points,</li>
+<li>12 steepest ascend points,</li>
+<li>8 optimization points,</li>
+<li>1 validation point</li>
+</ul>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      A         B C   D  E  F  G        Y      block
+1   3.0   5.00000 6  50 15 10 10 28.68106     screen
+2   1.0  15.00000 4  50 15 10 30 39.10893     screen
+3   3.0   5.00000 4  50  5 30 30 27.57139     screen
+4   3.0  15.00000 4 150  5 10 10 42.48301     screen
+5   1.0   5.00000 6 150  5 10 30 26.82177     screen
+6   3.0  15.00000 6 150 15 30 30 40.27409     screen
+7   1.0   5.00000 4 150 15 30 10 26.95020     screen
+8   1.0  15.00000 6  50  5 30 10 37.05763     screen
+9   2.0  10.00000 5 100 10 20 20 35.72106     center
+10  2.0  10.00000 5 100 10 20 20 35.96893     center
+11  2.0  10.00000 5 100 10 20 20 34.33139     center
+12  2.0  10.00000 5 100 10 20 20 33.64301     center
+13  3.0  10.92769 5 100 10 20 20 38.69539     ascend
+14  4.0  12.78308 5 100 10 20 20 42.66695     ascend
+15  5.0  15.56617 5 100 10 20 20 45.57423     ascend
+16  6.0  19.27694 5 100 10 20 20 50.22027     ascend
+17  7.0  23.91542 5 100 10 20 20 58.32829     ascend
+18  8.0  29.48158 5 100 10 20 20 59.88661     ascend
+19  9.0  35.97544 5 100 10 20 20 71.26416     ascend
+20 10.0  43.39700 5 100 10 20 20 75.56384     ascend
+21 11.0  51.74625 5 100 10 20 20 80.74307     ascend
+22 12.0  61.02319 5 100 10 20 20 83.09969     ascend
+23 13.0  71.22783 5 100 10 20 20 86.01014     ascend
+24 14.0  82.36016 5 100 10 20 20 88.00118     ascend
+25 14.0  60.00000 5 100 10 20 20 82.12106         BO
+26 13.9  60.00000 5 100 10 20 20 82.37706         BO
+27 11.0 100.00000 5 100 10 20 20 66.32106         BO
+28 11.0  90.00000 5 100 10 20 20 77.32106         BO
+29 14.0  95.00000 5 100 10 20 20 78.62106         BO
+30 11.0  80.00000 5 100 10 20 20 84.32106         BO
+31 14.0 100.00000 5 100 10 20 20 74.12106         BO
+32 11.1 100.00000 5 100 10 20 20 66.69706         BO
+33 14.0  75.00000 5 100 10 20 20 86.62106 validation</code></pre>
+</div>
+</div>
 </section>
 <section id="fair-principles-in-practice" class="slide level2" style="font-size:60%;">
 <h2>FAIR principles in practice</h2>
