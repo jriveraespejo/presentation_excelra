@@ -65,19 +65,6 @@ nam = paste(
 plot( d0[,1:2], pch=19, col=rgb(0,0,0,0.5),
       ylim=c( 0, mr[ 2 ] ), xlim=c( 0, mr[ 1 ] ), 
       ylab=names(d0)[ 2 ], xlab=nam )
-text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
-
-
-# plot
-par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
-plot( d0[,1:2], pch=19, col=rgb(0,0,0,0.5),
-      ylim=c( 0, mr[ 2 ] ), xlim=c( 0, mr[ 1 ] ), 
-      ylab=names(d0)[ 2 ], xlab=nam )
 rect( 0, 0, 4, 20, lty=2 )
 text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 
@@ -220,7 +207,7 @@ check = T
 set.seed( seed )
 while( check ){
   new$A = new$A + 1
-  if( new$A > mr[1] ){
+  if( new$A > 13 ){ # defined by subject matter experts
     break
   }
   new$B = new$B + with(sa, A/B)*(new$A-2)
@@ -273,14 +260,14 @@ text( d[ d$block=='ascend', 1:2 ] - 0.5,
 
 # equation of a line
 abline( a=a, b=b, lty=2 )
-rect( 11, 60, 14, 100, lty=2 )
+rect( 11, 55, 13.5, 95, lty=2 )
 
 
 # plot
 par( mfrow=c(1,1) )
 contour( model_rsm, ~ A+B, image=T,
-         ylim=c( 60, 100 ),
-         xlim=c( 11, 14 ) )
+         ylim=c( 55, 95 ),
+         xlim=c( 11, 13.5 ) )
 points( d[, 1:2 ], 
         pch=19, col=rgb(0,0,0,0.5) )
 text( d[ d$block=='ascend', 1:2 ] - 0.1, 
@@ -298,22 +285,9 @@ text( d[ d$block=='ascend', 1:2 ] - 0.1,
 dBO = tail(d, 3)
 
 # prediction points
-A = seq( 11, 14, by = 0.1 )
-B = seq( 60, 100, by = 5 )
+A = seq( 11.1, 13.4, by = 0.1 )
+B = seq( 60, 90, by = 5 )
 x_predict = data.frame( expand.grid( A=A, B=B ) )
-
-
-# plot
-par( mfrow=c(1,1) )
-plot( dBO[, 1:2 ], 
-      pch=19, col=rgb(0,0,0,0.5),
-      ylim=c( 59, 115 ),
-      xlim=c( 10.95, 14.05 ) )
-text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
-points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
-legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2) ), bty='n' )
-
 
 
 ## 2. Measure and Analyze ####
@@ -321,7 +295,7 @@ legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
 available_indices = 1:nrow(x_predict)
 n_runs = 8
 
-# procedure
+# BO procedure
 for( n in 1:n_runs ){ 
   
   # posterior predictions for pre-selection
@@ -348,14 +322,12 @@ for( n in 1:n_runs ){
   # remove the index we just sampled
   available_indices = available_indices[-rel_idx]
   
-  # plot
-  png( file.path( here(), 'figures', paste0('BO_run', n,'.png') ),
-       width=30, height=12, units='cm', res=150 )
-  
-  par(mfrow=c(1,2))
-  # for yield space
+  # plot for yield space
+  png( file.path( here(), 'figures', paste0('BO_yield_space', n,'.png') ),
+       width=15, height=12, units='cm', res=150 )
+   
   plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ),
+        ylim=c( 55, 105 ), xlim=c( 11, 13.5 ),
         main=paste0( 'Protein Yield Surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
@@ -372,9 +344,15 @@ for( n in 1:n_runs ){
           fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
           legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
   
-  # for LCB
+  dev.off()
+  
+  
+  # plot for for LCB
+  png( file.path( here(), 'figures', paste0('BO_lcb_space', n,'.png') ),
+       width=15, height=12, units='cm', res=150 )
+  
   plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) ,
+        ylim=c( 55, 105 ), xlim=c( 11, 13.5 ),
         main=paste0( 'LCB surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
@@ -394,6 +372,7 @@ for( n in 1:n_runs ){
   dev.off()
   
 }
+
 
 
 # validate

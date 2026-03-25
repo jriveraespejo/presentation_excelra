@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Jose Manuel Rivera Espejo">
-  <meta name="dcterms.date" content="2026-03-24">
+  <meta name="dcterms.date" content="2026-03-25">
   <title>Optimizing Protein Yield</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -365,18 +365,7 @@ Jose Manuel Rivera Espejo
 </div>
 </div>
 
-  <p class="date">24 March 2026</p>
-</section>
-<section id="the-contents" class="slide level2" style="font-size:60%;">
-<h2>The contents</h2>
-<ol type="1">
-<li>Motivating example</li>
-<li>Step 1: Identify relevant factors</li>
-<li>Step 2: Steepest ascend</li>
-<li>Step 3: Bayesian Optimization</li>
-<li>The reality</li>
-<li>FAIR principles in practice</li>
-</ol>
+  <p class="date">25 March 2026</p>
 </section>
 <section id="motivating-example" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
@@ -384,8 +373,9 @@ Jose Manuel Rivera Espejo
 <ul>
 <li>Interested in high-value protein production process</li>
 <li>Subject matter experts think the current operating conditions may be sub-optimal</li>
-<li>Subject matter experts have identified seven (<span class="math inline">\(7\)</span>) factors may affect the process yield (<span class="math inline">\(Y\)</span>),</li>
+<li>Subject matter experts have identified seven (<span class="math inline">\(7\)</span>) factors may affect the process yield (<span class="math inline">\(Y\)</span>).</li>
 </ul>
+<p>For example,</p>
 <table>
 <thead>
 <tr class="header">
@@ -450,9 +440,9 @@ Jose Manuel Rivera Espejo
 </ol>
 <p><strong>Constraint:</strong> Minimize experimental runs, because laboratory experiments are:</p>
 <ul>
-<li>Expensive</li>
 <li>Time-consuming</li>
-<li>Resource-consuming</li>
+<li>Resource-intensive</li>
+<li>Expensive</li>
 </ul>
 </section>
 <section id="motivating-example-2" class="slide level2" style="font-size:60%;">
@@ -473,12 +463,12 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
-<section id="motivating-example-3" class="slide level2" style="font-size:60%;">
-<h2>Motivating example</h2>
-<p>To facilitate the explanation, we focus on factors A and B.</p>
+<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
+<h2>Step 1: Identify relevant factors</h2>
+<p>Subject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"><aside class="notes">
-<p>But the ideas presented here apply equally to the remaining factors.</p>
+<p>To facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -491,16 +481,11 @@ Jose Manuel Rivera Espejo
           display:block!important;
       }</style></aside>
 </section>
-<section id="step-1-identify-relevant-factors" class="slide level2" style="font-size:60%;">
-<h2>Step 1: Identify relevant factors</h2>
-<p>Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
 <section id="step-1-identify-relevant-factors-1" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
+<p>Subject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
 <section id="step-1-identify-relevant-factors-2" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
 <p>Two options:</p>
@@ -533,9 +518,9 @@ Jose Manuel Rivera Espejo
 </section>
 <section id="step-1-identify-relevant-factors-3" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>The chosen <strong>resolution III CRFF design</strong> have the following characteristics:</p>
+<p>In a <strong>resolution III CRFF design</strong>, what does it mean to be <em>aliased</em>?</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><aside class="notes">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Aliases"</code></pre>
@@ -576,7 +561,7 @@ Jose Manuel Rivera Espejo
 <h2>Step 1: Identify relevant factors</h2>
 <p>But how does it looks like in the factor space?</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>This design happen at every combination of the <span class="math inline">\(7\)</span> factors</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -621,9 +606,9 @@ F-statistic:   NaN on 7 and 0 DF,  p-value: NA</code></pre>
 </section>
 <section id="step-1-identify-relevant-factors-6" class="slide level2" style="font-size:60%;">
 <h2>Step 1: Identify relevant factors</h2>
-<p>Thanks the Central Limit Theorem (CLT) we can still find which factors are relevant.</p>
+<p>Thanks to the Central Limit Theorem (CLT) we can still find which factors are relevant.</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>NO relevance of <span class="math inline">\(D\)</span>, which could indicate the presence of 2fi between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -711,7 +696,7 @@ F-statistic: 106.2 on 2 and 5 DF,  p-value: 8.024e-05</code></pre>
 <h2>Step 2: Steepest ascend</h2>
 <p>To build a model that describes the yield space, we need to add some <em>center points</em>,</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-1" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
 <p>And we check these points are no different than the rest,</p>
@@ -787,22 +772,22 @@ Corresponding increment in original units:
 </div>
 </div>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-4" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
 <p>Now we proceed to ascend towards a maximum,</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-5" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
 <p>And we focus our attention on the highest yield area,</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="step-2-steepest-ascend-6" class="slide level2" style="font-size:60%;">
 <h2>Step 2: Steepest ascend</h2>
 <p>And we focus our attention on the highest yield area,</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
 <section id="step-3-bayesian-optimization" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
 <p>Within this high-yield region, we implement <strong>Bayesian Optimization (BO)</strong> <span class="citation" data-cites="Sweet_2023 Nielsen_2023">[<a href="#/references" role="doc-biblioref" onclick="">2</a>, <a href="#/references" role="doc-biblioref" onclick="">3</a>]</span>.</p>
@@ -821,58 +806,55 @@ Corresponding increment in original units:
 </section>
 <section id="step-3-bayesian-optimization-1" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
-<p>How does the training and candidate data look like?</p>
-
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
+<div class="quarto-layout-panel" data-layout-ncol="2" data-layout-nrow="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space1.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space2.png" style="width:72.0%"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space3.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space4.png" style="width:72.0%"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="step-3-bayesian-optimization-2" class="slide level2" style="font-size:60%;">
 <h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run1.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-3" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run2.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-4" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run3.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-5" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run4.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-6" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run5.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-7" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run6.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-8" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run7.png" width="650" class="r-stretch"></section>
-<section id="step-3-bayesian-optimization-9" class="slide level2" style="font-size:60%;">
-<h2>Step 3: Bayesian Optimization</h2>
-<p>How does the BO procedure progress?</p>
-
-<img data-src="figures/BO_run8.png" width="650" class="r-stretch"></section>
-<section id="the-reality" class="slide level2" style="font-size:60%;">
-<h2>The reality</h2>
+<div class="quarto-layout-panel" data-layout-ncol="2" data-layout-nrow="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space5.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space6.png" style="width:72.0%"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space7.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_yield_space8.png" style="width:72.0%"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-simulated-true-yield-surface" class="slide level2" style="font-size:60%;">
+<h2>The simulated true yield surface</h2>
 <p>The “unknown” <strong>true model</strong> for protein yield (<span class="math inline">\(Y\)</span>) was:</p>
 <p><span class="math display">\[
 Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12)(B-70) + e; \quad \; e \sim N(0, 2)
 \]</span></p>
-<p>“unknown” <strong>true</strong> protein yield surface:</p>
+<p>The “unknown” <strong>true</strong> protein yield surface:</p>
 
-<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"><aside class="notes">
 <ul>
 <li>In reality the <strong>true model</strong> is not available to us.</li>
 <li>However, simulation is useful to showcase the potential of the experimental strategies.</li>
@@ -889,70 +871,23 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
           display:block!important;
       }</style></aside>
 </section>
-<section id="the-reality-1" class="slide level2" style="font-size:60%;">
-<h2>The reality</h2>
-<p>We managed to achieve this level of optimization with <span class="math inline">\(33\)</span> experimental runs:</p>
-<div style="font-size:80%;">
+<section id="conclusion" class="slide level2" style="font-size:60%;">
+<h2>Conclusion</h2>
+<ol type="1">
+<li><p><strong>Result:</strong> a “good” level of optimization with <span class="math inline">\(33\)</span> experimental runs:</p>
 <ul>
 <li>8 screening points,</li>
 <li>4 center points,</li>
-<li>12 steepest ascend points,</li>
+<li>11 steepest ascend points,</li>
 <li>8 optimization points,</li>
 <li>1 validation point</li>
-</ul>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>      A         B C   D  E  F  G        Y      block
-1   3.0   5.00000 6  50 15 10 10 28.68106     screen
-2   1.0  15.00000 4  50 15 10 30 39.10893     screen
-3   3.0   5.00000 4  50  5 30 30 27.57139     screen
-4   3.0  15.00000 4 150  5 10 10 42.48301     screen
-5   1.0   5.00000 6 150  5 10 30 26.82177     screen
-6   3.0  15.00000 6 150 15 30 30 40.27409     screen
-7   1.0   5.00000 4 150 15 30 10 26.95020     screen
-8   1.0  15.00000 6  50  5 30 10 37.05763     screen
-9   2.0  10.00000 5 100 10 20 20 35.72106     center
-10  2.0  10.00000 5 100 10 20 20 35.96893     center
-11  2.0  10.00000 5 100 10 20 20 34.33139     center
-12  2.0  10.00000 5 100 10 20 20 33.64301     center
-13  3.0  10.92769 5 100 10 20 20 38.69539     ascend
-14  4.0  12.78308 5 100 10 20 20 42.66695     ascend
-15  5.0  15.56617 5 100 10 20 20 45.57423     ascend
-16  6.0  19.27694 5 100 10 20 20 50.22027     ascend
-17  7.0  23.91542 5 100 10 20 20 58.32829     ascend
-18  8.0  29.48158 5 100 10 20 20 59.88661     ascend
-19  9.0  35.97544 5 100 10 20 20 71.26416     ascend
-20 10.0  43.39700 5 100 10 20 20 75.56384     ascend
-21 11.0  51.74625 5 100 10 20 20 80.74307     ascend
-22 12.0  61.02319 5 100 10 20 20 83.09969     ascend
-23 13.0  71.22783 5 100 10 20 20 86.01014     ascend
-24 14.0  82.36016 5 100 10 20 20 88.00118     ascend
-25 14.0  60.00000 5 100 10 20 20 82.12106         BO
-26 13.9  60.00000 5 100 10 20 20 82.37706         BO
-27 11.0 100.00000 5 100 10 20 20 66.32106         BO
-28 11.0  90.00000 5 100 10 20 20 77.32106         BO
-29 14.0  95.00000 5 100 10 20 20 78.62106         BO
-30 11.0  80.00000 5 100 10 20 20 84.32106         BO
-31 14.0 100.00000 5 100 10 20 20 74.12106         BO
-32 11.1 100.00000 5 100 10 20 20 66.69706         BO
-33 14.0  75.00000 5 100 10 20 20 86.62106 validation</code></pre>
-</div>
-</div>
-</section>
-<section id="fair-principles-in-practice" class="slide level2" style="font-size:60%;">
-<h2>FAIR principles in practice</h2>
-<p>This presentation is built to be a <strong>research object</strong>, not just a slide deck.</p>
-<ul>
-<li><p><strong>Findable (F):</strong> Searchable text and structured metadata ensure the content is discoverable.</p>
-<p>Next step: Provision of a DOI via Zenodo or OSF.</p></li>
-<li><p><strong>Accesible (A):</strong> Publicly hosted on GitHub.</p>
-<p>Anyone with an internet connection can retrieve the slides and underlying data.</p></li>
-<li><p><strong>Interoperable (I):</strong> Built using Open Source (Quarto/<code>R</code>).</p>
-<p>Seamlessly integrates into any analysis workflow and automated pipelines.</p></li>
-<li><p><strong>Reusable (R):</strong> BSD 3 Licensed.</p>
-<p>Includes all <code>R</code> dependencies and source code to fully replicate every simulation and analysis.</p></li>
-</ul>
+</ul></li>
+<li><p><strong>Reproducibility:</strong></p>
+<p>Specific <em>seed</em> allows us to reproduce this study with the same results.</p></li>
+<li><p><strong>Replicability:</strong></p>
+<p>This is one simulation! How well does the process replicate to multiple simulations?</p></li>
+</ol>
+<p>More discussion in the <strong>Annexes</strong></p>
 </section>
 <section id="thank-you" class="slide level2 center-xy">
 <h2>Thank you</h2>
@@ -973,16 +908,55 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <section id="questions" class="slide level2 center-xy">
 <h2>Questions?</h2>
 </section>
+<section id="annex-lcb-space" class="slide level2" style="font-size:60%;">
+<h2>Annex: LCB space</h2>
+<div class="quarto-layout-panel" data-layout-ncol="2" data-layout-nrow="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space1.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space2.png" style="width:72.0%"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space3.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space4.png" style="width:72.0%"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="annex-lcb-space-1" class="slide level2" style="font-size:60%;">
+<h2>Annex: LCB space</h2>
+<div class="quarto-layout-panel" data-layout-ncol="2" data-layout-nrow="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space5.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space6.png" style="width:72.0%"></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space7.png" style="width:72.0%"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="figures/BO_lcb_space8.png" style="width:72.0%"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="annex-additional-considerations" class="slide level2" style="font-size:60%;">
-<h2>Annex: additional considerations</h2>
+<h2>Annex: Additional considerations</h2>
 <p>In a real-world setting, the identification of those <span class="math inline">\(7\)</span> factors probably comes from experiments that seek to determine <strong>Sources of Variability</strong>. e.g.,</p>
 <ul>
 <li><strong>RSE (Random Statistical Error):</strong> Natural fluctuations in biological systems.</li>
 <li><strong>NSE (Non-Systematic Error):</strong> Potential issues with equipment or batch effects.</li>
 </ul>
-</section>
-<section id="annex-additional-considerations-1" class="slide level2" style="font-size:60%;">
-<h2>Annex: additional considerations</h2>
 <p>What happens when the problem grows?</p>
 <ul>
 <li><strong>Multiple Objectives:</strong> If we need high <strong>Yield</strong> but low <strong>Waste</strong>, we employ <strong>Desirability Functions</strong> to find the “Sweet Spot” that balances both.</li>
@@ -991,6 +965,20 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <li>Empirical models (RSM/BO) are dangerous outside their tested range.</li>
 <li>If we must predict outside our data, we shift toward <strong>Theoretical/Mechanistic Models</strong> based on biological first principles.</li>
 </ul></li>
+</ul>
+</section>
+<section id="annex-fair-principles" class="slide level2" style="font-size:60%;">
+<h2>Annex: FAIR principles</h2>
+<p>This presentation is built to be a <strong>research object</strong>, not just a slide deck.</p>
+<ul>
+<li><p><strong>Findable (F):</strong> Searchable text and structured metadata ensure the content is discoverable.</p>
+<p>Next step: Provision of a DOI via Zenodo or OSF.</p></li>
+<li><p><strong>Accesible (A):</strong> Publicly hosted on GitHub.</p>
+<p>Anyone with an internet connection can retrieve the slides and underlying data.</p></li>
+<li><p><strong>Interoperable (I):</strong> Built using Open Source (Quarto/<code>R</code>).</p>
+<p>Seamlessly integrates into any analysis workflow and automated pipelines.</p></li>
+<li><p><strong>Reusable (R):</strong> BSD 3 Licensed.</p>
+<p>Includes all <code>R</code> dependencies and source code to fully replicate every simulation and analysis.</p></li>
 </ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable" style="font-size:60%;">

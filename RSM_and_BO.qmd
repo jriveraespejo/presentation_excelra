@@ -17,15 +17,6 @@ include-in-header:
       </style>
 ---
 
-## The contents {style="font-size:60%;"}
-
-1. Motivating example
-2. Step 1: Identify relevant factors 
-3. Step 2: Steepest ascend
-4. Step 3: Bayesian Optimization
-5. The reality 
-6. FAIR principles in practice
-
 ```{r}
 #| echo: false
 #| output: false
@@ -63,7 +54,9 @@ seed = 12345
 
 - Interested in high-value protein production process
 - Subject matter experts think the current operating conditions may be sub-optimal
-- Subject matter experts have identified seven ($7$) factors may affect the process yield ($Y$),
+- Subject matter experts have identified seven ($7$) factors may affect the process yield ($Y$).
+
+For example,
 
 | Variable | Factor           | Range       | Units |
 | :---     | :---             | :---        | :---  |
@@ -87,9 +80,9 @@ seed = 12345
 
 **Constraint:** Minimize experimental runs, because laboratory experiments are:
 
-- Expensive
 - Time-consuming
-- Resource-consuming
+- Resource-intensive
+- Expensive
 
 
 ---
@@ -153,40 +146,9 @@ there is so much **parameter space** to explore!
 
 ---
 
-## Motivating example {style="font-size:60%;"}
-
-To facilitate the explanation, we focus on factors A and B.
-
-```{r}
-#| echo: false
-#| output: true
-#| code-fold: true
-#| code-summary: "code"
-
-# plot
-par( mfrow=c(1,1) )
-idx = !names(d0) %in% c( names(d0)[ 1:2 ], 'Y' )
-nam = paste( 
-  names(d0)[ 1 ],'\n',
-  paste( names(d0)[idx], '=', d0[,idx], collapse=', ') )
-
-plot( d0[,1:2], pch=19, col=rgb(0,0,0,0.5),
-      ylim=c( 0, mr[ 2 ] ), xlim=c( 0, mr[ 1 ] ), 
-      ylab=names(d0)[ 2 ], xlab=nam )
-text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
-
-```
-
-:::{.notes}
-But the ideas presented here apply equally to the remaining factors.
-:::
-
-
----
-
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.
+Subject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -209,11 +171,16 @@ text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 
 ```
 
+:::{.notes}
+To facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.
+:::
+
+
 ---
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-Subject matter experts determine the restricted region of interest within the seven factor space, illustrated using factors A and B.
+Subject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.
 
 ```{r}
 #| echo: false
@@ -260,7 +227,7 @@ Because we are **screening** we choose the second option.
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-The chosen **resolution III CRFF design** have the following characteristics:
+In a **resolution III CRFF design**, what does it mean to be *aliased*?
 
 ```{r}
 #| echo: false
@@ -392,7 +359,7 @@ summary(model1)
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
 
-Thanks the Central Limit Theorem (CLT) we can still find which factors are relevant.
+Thanks to the Central Limit Theorem (CLT) we can still find which factors are relevant.
 
 ```{r}
 #| echo: false
@@ -555,7 +522,7 @@ check = T
 set.seed( seed )
 while( check ){
   new$A = new$A + 1
-  if( new$A > mr[1] ){
+  if( new$A > 13 ){ # defined by subject matter experts
     break
   }
   new$B = new$B + with(sa, A/B)*(new$A-2)
@@ -641,7 +608,7 @@ text( d[ d$block=='ascend', 1:2 ] - 0.5,
 
 # equation of a line
 abline( a=a, b=b, lty=2 )
-rect( 11, 60, 14, 100, lty=2 )
+rect( 11, 55, 13.5, 95, lty=2 )
 
 ```
 
@@ -661,8 +628,8 @@ And we focus our attention on the highest yield area,
 # plot
 par( mfrow=c(1,1) )
 contour( model_rsm, ~ A+B, image=T,
-         ylim=c( 60, 100 ),
-         xlim=c( 11, 14 ) )
+         ylim=c( 55, 95 ),
+         xlim=c( 11, 13.5 ) )
 points( d[, 1:2 ], 
         pch=19, col=rgb(0,0,0,0.5) )
 text( d[ d$block=='ascend', 1:2 ] - 0.1, 
@@ -695,13 +662,11 @@ Specifically:
     [A central composite design [@Lawson_2015] requires a total of $12$ runs: $4$ factorial points, $4$ axial (face) points, and $4$ center points.]{style="font-size:80%;"}
     
     [**Our BO procedure will use only $8$ runs.**]{style="font-size:80%;"}
-
+    
 
 ---
 
 ## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the training and candidate data look like?
 
 ```{r}
 #| echo: false
@@ -713,37 +678,12 @@ How does the training and candidate data look like?
 dBO = tail(d, 3)
 
 # prediction points
-A = seq( 11, 14, by = 0.1 )
-B = seq( 60, 100, by = 5 )
+A = seq( 11.1, 13.4, by = 0.1 )
+B = seq( 60, 90, by = 5 )
 x_predict = data.frame( expand.grid( A=A, B=B ) )
 
 ```
 
-```{r}
-#| echo: false
-#| output: true
-#| code-fold: true
-#| code-summary: "code"
-
-# plot
-par( mfrow=c(1,1) )
-plot( dBO[, 1:2 ], 
-      pch=19, col=rgb(0,0,0,0.5),
-      ylim=c( 59, 115 ),
-      xlim=c( 10.95, 14.05 ) )
-text( dBO[ , 1:2 ] - 0.1, labels = round( dBO$Y, 1) )
-points( x_predict, pch=19, col=rgb(0,0,1,0.2) )
-legend( 'topleft', legend=c( 'Training data', 'Candidate points' ),
-        fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2) ), bty='n' )
-
-```
-
-
----
-
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
 
 ```{r}
 #| echo: false
@@ -754,7 +694,7 @@ How does the BO procedure progress?
 available_indices = 1:nrow(x_predict)
 n_runs = 8
 
-# procedure
+# BO procedure
 for( n in 1:n_runs ){ 
   
   # posterior predictions for pre-selection
@@ -781,14 +721,12 @@ for( n in 1:n_runs ){
   # remove the index we just sampled
   available_indices = available_indices[-rel_idx]
   
-  # plot
-  png( file.path( here(), 'figures', paste0('BO_run', n,'.png') ),
-       width=30, height=12, units='cm', res=150 )
-  
-  par(mfrow=c(1,2))
-  # for yield space
+  # plot for yield space
+  png( file.path( here(), 'figures', paste0('BO_yield_space', n,'.png') ),
+       width=15, height=12, units='cm', res=150 )
+   
   plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ),
+        ylim=c( 55, 105 ), xlim=c( 11, 13.5 ),
         main=paste0( 'Protein Yield Surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
@@ -805,9 +743,15 @@ for( n in 1:n_runs ){
           fill=c( rgb(0,0,0,0.5), rgb(0,0,1,0.2), 'red' ),
           legend=c( 'Training data', 'Candidate points', 'Selected point' ) )
   
-  # for LCB
+  dev.off()
+  
+  
+  # plot for for LCB
+  png( file.path( here(), 'figures', paste0('BO_lcb_space', n,'.png') ),
+       width=15, height=12, units='cm', res=150 )
+  
   plot( dBO[ 1:(nrow(dBO)-1), 1:2 ], pch=19, col=rgb(0,0,0,0.5),
-        ylim=c( 59, 115 ), xlim=c( 10.9, 14.1 ) ,
+        ylim=c( 55, 105 ), xlim=c( 11, 13.5 ),
         main=paste0( 'LCB surface, step ', n) )
   text( dBO[ 1:(nrow(dBO)-1), 1:2 ] - 0.1, 
         labels = round( dBO$Y[ 1:(nrow(dBO)-1) ],1) )
@@ -830,74 +774,38 @@ for( n in 1:n_runs ){
 
 ```
 
-![](figures/BO_run1.png){width=650}
+
+::: {layout-nrow=2 layout-ncol=2}
+
+![](figures/BO_yield_space1.png){width=72%}
+
+![](figures/BO_yield_space2.png){width=72%}
+
+![](figures/BO_yield_space3.png){width=72%}
+
+![](figures/BO_yield_space4.png){width=72%}
+
+:::
 
 ---
 
 ## Step 3: Bayesian Optimization {style="font-size:60%;"}
 
-How does the BO procedure progress?
+::: {layout-nrow=2 layout-ncol=2}
 
-![](figures/BO_run2.png){width=650}
+![](figures/BO_yield_space5.png){width=72%}
 
+![](figures/BO_yield_space6.png){width=72%}
 
----
+![](figures/BO_yield_space7.png){width=72%}
 
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
+![](figures/BO_yield_space8.png){width=72%}
 
-How does the BO procedure progress?
-
-![](figures/BO_run3.png){width=650}
-
+:::
 
 ---
 
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
-
-![](figures/BO_run4.png){width=650}
-
-
----
-
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
-
-![](figures/BO_run5.png){width=650}
-
-
----
-
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
-
-![](figures/BO_run6.png){width=650}
-
-
----
-
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
-
-![](figures/BO_run7.png){width=650}
-
-
----
-
-## Step 3: Bayesian Optimization {style="font-size:60%;"}
-
-How does the BO procedure progress?
-
-![](figures/BO_run8.png){width=650}
-
-
----
-
-## The reality {style="font-size:60%;"}
+## The simulated true yield surface {style="font-size:60%;"}
 
 The "unknown" **true model** for protein yield ($Y$) was:
 
@@ -905,7 +813,7 @@ $$
 Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12)(B-70) + e; \quad \; e \sim N(0, 2)
 $$
 
-"unknown" **true** protein yield surface:
+The "unknown" **true** protein yield surface:
 
 ```{r}
 #| echo: false
@@ -984,30 +892,94 @@ legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
 
 ---
 
-## The reality {style="font-size:60%;"}
+## Conclusion {style="font-size:60%;"}
 
-We managed to achieve this level of optimization with $33$ experimental runs:
+1. **Result:** a "good" level of optimization with $33$ experimental runs:
 
-:::{style="font-size:80%;"}
-- `r sum(d$block=='screen')` screening points,
-- `r sum(d$block=='center')` center points,
-- `r sum(d$block=='ascend')` steepest ascend points,
-- `r sum(d$block=='BO')` optimization points,
-- `r sum(d$block=='validation')` validation point
-:::
+    - `r sum(d$block=='screen')` screening points,
+    - `r sum(d$block=='center')` center points,
+    - `r sum(d$block=='ascend')` steepest ascend points,
+    - `r sum(d$block=='BO')` optimization points,
+    - `r sum(d$block=='validation')` validation point
+    
+2. **Reproducibility:** 
 
-```{r}
-#| echo: false
-#| output: true
-#| code-fold: true
-#| code-summary: "code"
+    Specific *seed* allows us to reproduce this study with the same results.
 
-d
-```
+3. **Replicability:**
+
+    This is one simulation! How well does the process replicate to multiple simulations?
+
+More discussion in the **Annexes**
+
 
 ---
 
-## FAIR principles in practice {style="font-size:60%;"}
+## Thank you {.center-xy}
+
+::: {.notes}
+To conclude I can say that, 
+
+:::
+
+
+---
+
+## Questions? {.center-xy}
+
+
+---
+
+## Annex: LCB space {style="font-size:60%;"}
+
+::: {layout-nrow=2 layout-ncol=2}
+
+![](figures/BO_lcb_space1.png){width=72%}
+
+![](figures/BO_lcb_space2.png){width=72%}
+
+![](figures/BO_lcb_space3.png){width=72%}
+
+![](figures/BO_lcb_space4.png){width=72%}
+
+:::
+
+
+## Annex: LCB space {style="font-size:60%;"}
+
+::: {layout-nrow=2 layout-ncol=2}
+
+![](figures/BO_lcb_space5.png){width=72%}
+
+![](figures/BO_lcb_space6.png){width=72%}
+
+![](figures/BO_lcb_space7.png){width=72%}
+
+![](figures/BO_lcb_space8.png){width=72%}
+
+:::
+
+
+---
+
+## Annex: Additional considerations {style="font-size:60%;"}
+
+In a real-world setting, the identification of those $7$ factors probably comes from experiments that seek to determine **Sources of Variability**. e.g.,
+
+* **RSE (Random Statistical Error):** Natural fluctuations in biological systems.
+* **NSE (Non-Systematic Error):** Potential issues with equipment or batch effects.
+
+What happens when the problem grows?
+
+* **Multiple Objectives:** If we need high **Yield** but low **Waste**, we employ **Desirability Functions** to find the "Sweet Spot" that balances both.
+* **Extrapolation:**
+    * Empirical models (RSM/BO) are dangerous outside their tested range.
+    * If we must predict outside our data, we shift toward **Theoretical/Mechanistic Models** based on biological first principles.
+
+
+---
+
+## Annex: FAIR principles {style="font-size:60%;"}
 
 This presentation is built to be a **research object**, not just a slide deck.
 
@@ -1027,40 +999,6 @@ This presentation is built to be a **research object**, not just a slide deck.
 
     Includes all `R` dependencies and source code to fully replicate every simulation and analysis. 
 
-
----
-
-## Thank you {.center-xy}
-
-::: {.notes}
-To conclude I can say that, 
-
-:::
-
-
----
-
-## Questions? {.center-xy}
-
----
-
-## Annex: additional considerations {style="font-size:60%;"}
-
-In a real-world setting, the identification of those $7$ factors probably comes from experiments that seek to determine **Sources of Variability**. e.g.,
-
-* **RSE (Random Statistical Error):** Natural fluctuations in biological systems.
-* **NSE (Non-Systematic Error):** Potential issues with equipment or batch effects.
-
----
-
-## Annex: additional considerations {style="font-size:60%;"}
-
-What happens when the problem grows?
-
-* **Multiple Objectives:** If we need high **Yield** but low **Waste**, we employ **Desirability Functions** to find the "Sweet Spot" that balances both.
-* **Extrapolation:**
-    * Empirical models (RSM/BO) are dangerous outside their tested range.
-    * If we must predict outside our data, we shift toward **Theoretical/Mechanistic Models** based on biological first principles.
 
 ---
 
