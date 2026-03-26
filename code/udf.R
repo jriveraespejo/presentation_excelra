@@ -97,7 +97,7 @@ true_protein_yield = function(
   
   # outcome
   mu = betas[1] + Xd %*% betas[2:length(betas)] 
-  Y = as.vector( mu + e )
+  Y = round( as.vector( mu + e ), 2 )
    
   # return object
   return( Y )
