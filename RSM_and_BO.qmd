@@ -202,6 +202,14 @@ text( d0[,1:2] + 0.15, labels =round(d0$Y,1) )
 
 ```
 
+:::{.notes}
+Similar to an Evolutionary Operations (EVOP) process, where the planned changes in the key process variables:
+
+1. are small enough so the product output is not degraded.
+2. are big enough so potential improvements can be recognized.
+:::
+
+
 ---
 
 ## Step 1: Identify relevant factors {style="font-size:60%;"}
