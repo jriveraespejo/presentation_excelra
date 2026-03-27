@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.550">
 
   <meta name="author" content="Jose Manuel Rivera Espejo">
-  <meta name="dcterms.date" content="2026-03-26">
+  <meta name="dcterms.date" content="2026-03-27">
   <title>Optimizing Protein Yield</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -353,7 +353,10 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-notes="<p>Thank you for having me, Lynn and Francisco</p>" class="quarto-title-block center">
+<section id="title-slide" data-notes="<ul>
+<li>Thank you for the oportunity, Lynn and Francisco</li>
+<li>Simulation is useful to showcase the potential of the experimental strategies.</li>
+</ul>" class="quarto-title-block center">
   <h1 class="title">Optimizing Protein Yield</h1>
   <p class="subtitle">RSM with BO</p>
 
@@ -365,15 +368,15 @@ Jose Manuel Rivera Espejo
 </div>
 </div>
 
-  <p class="date">26 March 2026</p>
+  <p class="date">27 March 2026</p>
 </section>
 <section id="motivating-example" class="slide level2" style="font-size:60%;">
 <h2>Motivating example</h2>
 <p><strong>Context:</strong></p>
 <ul>
-<li>Interested in high-value protein production process</li>
-<li>Subject matter experts think the current operating conditions may be sub-optimal</li>
-<li>Subject matter experts have identified seven (<span class="math inline">\(7\)</span>) factors may affect the process yield (<span class="math inline">\(Y\)</span>).</li>
+<li>A client is interested in one of their high-value protein production process</li>
+<li>The subject matter experts think the current operating conditions may be sub-optimal</li>
+<li>The subject matter experts have identified seven (<span class="math inline">\(7\)</span>) factors may affect the process yield (<span class="math inline">\(Y\)</span>).</li>
 </ul>
 <p>For example,</p>
 <table>
@@ -469,11 +472,12 @@ Jose Manuel Rivera Espejo
 
 <img data-src="RSM_and_BO_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>To facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.</p>
-<p>Similar to an <strong>Evolutionary Operations (EVOP)</strong> process, where the planned changes in the key process variables:</p>
+<p>We need an area where the planned changes in the <strong>critical process variables (CPP)</strong>:</p>
 <ol type="1">
 <li>are small enough so the product output is not degraded.</li>
 <li>are big enough so potential improvements can be recognized.</li>
 </ol>
+<p>basically, accentuate the factor effects (treatment design) <span class="citation" data-cites="Lawson_2015">[<a href="#/references" role="doc-biblioref" onclick="">1</a>]</span>.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -851,8 +855,8 @@ Corresponding increment in original units:
 </div>
 </div>
 </section>
-<section id="the-simulated-true-yield-surface" class="slide level2" style="font-size:60%;">
-<h2>The simulated true yield surface</h2>
+<section id="the-validation-the-simulated-true-yield-surface" class="slide level2" style="font-size:60%;">
+<h2>The Validation: The simulated true yield surface</h2>
 <p>The “unknown” <strong>true model</strong> for protein yield (<span class="math inline">\(Y\)</span>) was:</p>
 <p><span class="math display">\[
 Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12)(B-70) + e; \quad \; e \sim N(0, 2)
@@ -879,7 +883,7 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <section id="conclusion" class="slide level2" style="font-size:60%;">
 <h2>Conclusion</h2>
 <ol type="1">
-<li><p><strong>Result:</strong> a “good” level of optimization with <span class="math inline">\(33\)</span> experimental runs:</p>
+<li><p><strong>Result:</strong> an optimized outcome with <span class="math inline">\(33\)</span> experimental runs:</p>
 <ul>
 <li>8 screening points,</li>
 <li>4 center points,</li>
@@ -888,11 +892,12 @@ Y = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \sum_{j=3}^{7} 0.01 \cdot X_{j} + 0.1(A-12
 <li>1 validation point</li>
 </ul></li>
 <li><p><strong>Reproducibility:</strong></p>
-<p>Specific <em>seed</em> allows us to reproduce this study with the same results.</p></li>
+<p>A fixed <em>random seed</em> ensures the study can be reproduced with identical results.</p></li>
 <li><p><strong>Replicability:</strong></p>
-<p>This is one simulation! How well does the process replicate to multiple simulations?</p></li>
+<p>This is a single simulation. How consistent are the results across repeated simulations?</p></li>
+<li><p>Further discussion?</p>
+<p>see the <strong>Annexes</strong></p></li>
 </ol>
-<p>More discussion in the <strong>Annexes</strong></p>
 </section>
 <section id="thank-you" class="slide level2 center-xy">
 <h2>Thank you</h2>

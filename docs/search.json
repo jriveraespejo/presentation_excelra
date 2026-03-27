@@ -4,7 +4,7 @@
     "href": "RSM_and_BO.html#motivating-example",
     "title": "Optimizing Protein Yield",
     "section": "Motivating example",
-    "text": "Motivating example\nContext:\n\nInterested in high-value protein production process\nSubject matter experts think the current operating conditions may be sub-optimal\nSubject matter experts have identified seven (\\(7\\)) factors may affect the process yield (\\(Y\\)).\n\nFor example,\n\n\n\nVariable\nFactor\nRange\nUnits\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%"
+    "text": "Motivating example\nContext:\n\nA client is interested in one of their high-value protein production process\nThe subject matter experts think the current operating conditions may be sub-optimal\nThe subject matter experts have identified seven (\\(7\\)) factors may affect the process yield (\\(Y\\)).\n\nFor example,\n\n\n\nVariable\nFactor\nRange\nUnits\n\n\n\n\n\\(A\\)\npH\n\\(0.0-14.0\\)\n\n\n\n\\(B\\)\nTemp\n\\(0.0-100.0\\)\nC\n\n\n\\(C\\)\nIncubation time\n\\(0-96\\)\nh\n\n\n\\(D\\)\nAgitation speed\n\\(0-1000\\)\nRPM\n\n\n\\(E\\)\nInitial glucose\n\\(0-30\\)\ng/l\n\n\n\\(F\\)\nDissolved oxygen\n\\(0-100\\)\n%\n\n\n\\(G\\)\nInoculum volume\n\\(0-100\\)\n%"
   },
   {
     "objectID": "RSM_and_BO.html#motivating-example-1",
@@ -25,7 +25,7 @@
     "href": "RSM_and_BO.html#step-1-identify-relevant-factors",
     "title": "Optimizing Protein Yield",
     "section": "Step 1: Identify relevant factors",
-    "text": "Step 1: Identify relevant factors\nSubject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.\n\n\nTo facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.\nSimilar to an Evolutionary Operations (EVOP) process, where the planned changes in the key process variables:\n\nare small enough so the product output is not degraded.\nare big enough so potential improvements can be recognized."
+    "text": "Step 1: Identify relevant factors\nSubject matter experts have determined the restricted region of interest within the seven factor space, illustrated using factors A and B.\n\n\nTo facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.\nWe need an area where the planned changes in the critical process variables (CPP):\n\nare small enough so the product output is not degraded.\nare big enough so potential improvements can be recognized.\n\nbasically, accentuate the factor effects (treatment design) [1]."
   },
   {
     "objectID": "RSM_and_BO.html#step-1-identify-relevant-factors-1",
@@ -154,18 +154,18 @@
     "text": "Step 3: Bayesian Optimization"
   },
   {
-    "objectID": "RSM_and_BO.html#the-simulated-true-yield-surface",
-    "href": "RSM_and_BO.html#the-simulated-true-yield-surface",
+    "objectID": "RSM_and_BO.html#the-validation-the-simulated-true-yield-surface",
+    "href": "RSM_and_BO.html#the-validation-the-simulated-true-yield-surface",
     "title": "Optimizing Protein Yield",
-    "section": "The simulated true yield surface",
-    "text": "The simulated true yield surface\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\nThe “unknown” true protein yield surface:\n\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
+    "section": "The Validation: The simulated true yield surface",
+    "text": "The Validation: The simulated true yield surface\nThe “unknown” true model for protein yield (\\(Y\\)) was:\n\\[\nY = 85 - 0.4(A-12)^2 - 0.02(B-70)^2 + \\sum_{j=3}^{7} 0.01 \\cdot X_{j} + 0.1(A-12)(B-70) + e; \\quad \\; e \\sim N(0, 2)\n\\]\nThe “unknown” true protein yield surface:\n\n\n\nIn reality the true model is not available to us.\nHowever, simulation is useful to showcase the potential of the experimental strategies."
   },
   {
     "objectID": "RSM_and_BO.html#conclusion",
     "href": "RSM_and_BO.html#conclusion",
     "title": "Optimizing Protein Yield",
     "section": "Conclusion",
-    "text": "Conclusion\n\nResult: a “good” level of optimization with \\(33\\) experimental runs:\n\n8 screening points,\n4 center points,\n11 steepest ascend points,\n8 optimization points,\n1 validation point\n\nReproducibility:\nSpecific seed allows us to reproduce this study with the same results.\nReplicability:\nThis is one simulation! How well does the process replicate to multiple simulations?\n\nMore discussion in the Annexes"
+    "text": "Conclusion\n\nResult: an optimized outcome with \\(33\\) experimental runs:\n\n8 screening points,\n4 center points,\n11 steepest ascend points,\n8 optimization points,\n1 validation point\n\nReproducibility:\nA fixed random seed ensures the study can be reproduced with identical results.\nReplicability:\nThis is a single simulation. How consistent are the results across repeated simulations?\nFurther discussion?\nsee the Annexes"
   },
   {
     "objectID": "RSM_and_BO.html#thank-you",

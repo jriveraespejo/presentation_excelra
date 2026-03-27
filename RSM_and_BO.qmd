@@ -7,7 +7,9 @@ date-format: "DD MMMM YYYY"
 bibliography: references.bib
 title-slide-attributes: 
   data-notes: |
-    Thank you for having me, Lynn and Francisco
+    - Thank you for the oportunity, Lynn and Francisco
+    - Simulation is useful to showcase the potential of the experimental strategies.
+:::
 include-in-header:
   - text: |
       <style>
@@ -52,9 +54,9 @@ seed = 12345
 
 **Context:**
 
-- Interested in high-value protein production process
-- Subject matter experts think the current operating conditions may be sub-optimal
-- Subject matter experts have identified seven ($7$) factors may affect the process yield ($Y$).
+- A client is interested in one of their high-value protein production process
+- The subject matter experts think the current operating conditions may be sub-optimal
+- The subject matter experts have identified seven ($7$) factors may affect the process yield ($Y$).
 
 For example,
 
@@ -174,10 +176,12 @@ text( d0[,1:2] + 0.5, labels =round(d0$Y,1) )
 :::{.notes}
 To facilitate the explanation, we focus on factors A and B, but the ideas presented here apply equally to the remaining factors.
 
-Similar to an **Evolutionary Operations (EVOP)** process, where the planned changes in the key process variables:
+We need an area where the planned changes in the **critical process variables (CPP)**:
 
 1. are small enough so the product output is not degraded.
 2. are big enough so potential improvements can be recognized.
+
+basically, accentuate the factor effects (treatment design) [@Lawson_2015].
 :::
 
 
@@ -811,7 +815,7 @@ for( n in 1:n_runs ){
 
 ---
 
-## The simulated true yield surface {style="font-size:60%;"}
+## The Validation: The simulated true yield surface {style="font-size:60%;"}
 
 The "unknown" **true model** for protein yield ($Y$) was:
 
@@ -901,7 +905,7 @@ legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
 
 ## Conclusion {style="font-size:60%;"}
 
-1. **Result:** a "good" level of optimization with $33$ experimental runs:
+1. **Result:** an optimized outcome with $33$ experimental runs:
 
     - `r sum(d$block=='screen')` screening points,
     - `r sum(d$block=='center')` center points,
@@ -911,14 +915,16 @@ legend( 'left', bty='n', fill=c(cols[-4],'orange','red'),
     
 2. **Reproducibility:** 
 
-    Specific *seed* allows us to reproduce this study with the same results.
+    A fixed *random seed* ensures the study can be reproduced with identical results.
 
 3. **Replicability:**
 
-    This is one simulation! How well does the process replicate to multiple simulations?
+    This is a single simulation. How consistent are the results across repeated simulations?
 
-More discussion in the **Annexes**
+4. Further discussion? 
 
+    see the **Annexes**
+    
 
 ---
 
